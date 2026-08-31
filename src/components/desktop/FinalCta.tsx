@@ -6,12 +6,12 @@ import { Wave } from "@/components/ui/Wave";
 
 export function FinalCta() {
   return (
-    <section data-kin-reveal className="kin-bleed kin-bleed-dark relative mt-[124px] h-[425px] w-full bg-[#14161a]">
+    <section data-kin-reveal className="kin-bleed kin-bleed-dark relative kin-gap h-[425px] w-full bg-[#14161a]">
       <div className="absolute inset-0 overflow-hidden">
       <Wave src={A.waveDark} inset={[-117.18, 13.82, -57.83, -22.43]} parent={[1440, 425]} />
       <Wave src={A.waveDark} inset={[-44, -63.68, -131.01, 55.07]} parent={[1440, 425]} />
 
-      <p className="font-display absolute left-1/2 top-[80px] w-[604px] -translate-x-1/2 text-center text-[30px] uppercase leading-[1.2] text-white opacity-60">
+      <p className="kin-h-trim-display font-display absolute left-1/2 top-[80px] w-[604px] -translate-x-1/2 text-center text-[30px] uppercase leading-[1.2] text-white opacity-60">
         {FINAL_CTA.faded}
       </p>
       <h2 className="font-display absolute left-1/2 top-[128px] w-[604px] -translate-x-1/2 text-center text-[30px] uppercase leading-[1.2] text-white">

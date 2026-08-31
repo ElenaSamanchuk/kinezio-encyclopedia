@@ -7,8 +7,8 @@ export function Modules() {
   const [m1, m2, m3, m4] = MODULES;
 
   return (
-    <section data-kin-reveal id="program" className="kin-col mt-[120px] flex flex-col items-start gap-[36px]">
-      <h2 className="w-full text-[30px] font-semibold leading-[normal] text-[#242424]">Что находится внутри</h2>
+    <section data-kin-reveal id="program" className="kin-col kin-gap flex flex-col items-start gap-[36px]">
+      <h2 className="kin-h-trim w-full text-[30px] font-semibold leading-[normal] text-[#242424]">Что находится внутри</h2>
 
       <div className="grid w-full grid-cols-2 gap-[24px]">
         <article className={`${CARD} h-[232px] justify-between`}>

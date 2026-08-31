@@ -4,11 +4,11 @@ import { Wave } from "@/components/ui/Wave";
 
 export function Moment() {
   return (
-    <section data-kin-reveal className="relative mt-[68px] h-[531px] w-[430px] overflow-hidden">
+    <section data-kin-reveal className="relative kin-gap h-[531px] w-[430px] overflow-hidden">
       <div className="absolute left-[-80px] top-[-34px] h-[620px] w-[1566px] border border-solid border-[rgba(255,255,255,0.2)] bg-[#14161a]" />
       <Wave src={A.waveDark} inset={[-27.31, -118.49, -29.41, -40.47]} parent={[430, 531]} />
 
-      <h2 className="font-display absolute left-[12px] top-[40px] whitespace-pre text-[24px] uppercase leading-[1.2] text-white">
+      <h2 className="kin-h-trim-display font-display absolute left-[12px] top-[40px] whitespace-pre text-[24px] uppercase leading-[1.2] text-white">
         {MOMENT.titleLine1}
         <br />
         {MOMENT.titleLine2}

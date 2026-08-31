@@ -5,7 +5,7 @@ import { Countdown } from "@/components/ui/Countdown";
 
 export function Hero() {
   return (
-    <section id="top" className="relative h-[755px] w-[430px] bg-white">
+    <section data-kin-cta-stop id="top" className="relative h-[755px] w-[430px] bg-white">
       <div className="grad-hero-m absolute left-[10px] top-[54px] h-[701px] w-[410px] rounded-[24px]" />
 
       <div className="absolute left-[30px] top-[94px] flex w-[370px] flex-col items-center gap-[20px] text-center">

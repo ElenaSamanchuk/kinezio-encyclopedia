@@ -13,44 +13,38 @@ const THEORY_PHOTO =
 
 export function Theory() {
   return (
-    <section data-kin-reveal className="mx-auto mt-[68px] flex w-[406px] flex-col items-start gap-[24px]">
-      <h2 className="w-[258px] text-[24px] font-semibold leading-[normal] text-[#242424]">
+    <section data-kin-reveal className="mx-auto kin-gap flex w-[406px] flex-col items-start gap-[24px]">
+      <h2 className="kin-h-trim w-[258px] text-[24px] font-semibold leading-[normal] text-[#242424]">
         {THEORY.titleMobile}
       </h2>
 
+      {/* card → photo → card → photo → card: the stack alternates all the way down. */}
       <div className="flex w-full flex-col items-start gap-[20px]">
-        <div className="flex w-full flex-col items-start gap-[20px]">
-          <div className={CARD}>
-            <p className={CARD_TITLE}>{THEORY.clear.title}</p>
-            <p className={CARD_BODY}>
-              {THEORY.clear.bodyMobile[0]}
-              <br />
-              {THEORY.clear.bodyMobile[1]}
-            </p>
-          </div>
-          <div className="relative aspect-[406/200] w-full overflow-hidden rounded-[16px]">
-            <Img src={A.theoryA} alt="" aria-hidden className={THEORY_PHOTO} />
-            <Img src={A.theoryB} alt="Юрий и Алексей на съёмке" className={THEORY_PHOTO} />
-          </div>
+        <div className={CARD}>
+          <p className={CARD_TITLE}>{THEORY.clear.title}</p>
+          <p className={CARD_BODY}>
+            {THEORY.clear.bodyMobile[0]}
+            <br />
+            {THEORY.clear.bodyMobile[1]}
+          </p>
+        </div>
+
+        <div className="relative aspect-[406/200] w-full overflow-hidden rounded-[16px]">
+          <Img src={A.theoryA} alt="" aria-hidden className={THEORY_PHOTO} />
+          <Img src={A.theoryB} alt="Юрий и Алексей на съёмке" className={THEORY_PHOTO} />
         </div>
 
         <div className={CARD}>
-          <p className={CARD_TITLE}>{THEORY.kinesiology.title}</p>
-          <p className={CARD_BODY}>{THEORY.kinesiology.bodyMobile}</p>
+          <p className={CARD_TITLE}>{THEORY.anatomy.title}</p>
+          <p className={CARD_BODY}>{THEORY.anatomy.body}</p>
         </div>
 
-        <div className="flex w-full flex-col items-start gap-[20px]">
-          <div className="relative h-[165px] w-full overflow-hidden rounded-[16px]">
-            <Img
-              src={A.anatomyShoulder}
-              alt="Анатомия плечевого сустава"
-              className="absolute left-[0.01%] top-[-100.21%] h-[399.56%] w-[99.97%] max-w-none"
-            />
-          </div>
-          <div className={CARD}>
-            <p className={CARD_TITLE}>{THEORY.anatomy.title}</p>
-            <p className={CARD_BODY}>{THEORY.anatomy.body}</p>
-          </div>
+        <div className="relative h-[165px] w-full overflow-hidden rounded-[16px]">
+          <Img
+            src={A.anatomyShoulder}
+            alt="Анатомия плечевого сустава"
+            className="absolute left-[0.01%] top-[-100.21%] h-[399.56%] w-[99.97%] max-w-none"
+          />
         </div>
 
         <div className={`${CARD} gap-[15px]`}>

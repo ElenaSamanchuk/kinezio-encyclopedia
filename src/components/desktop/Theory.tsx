@@ -13,12 +13,12 @@ const THEORY_PHOTO =
 
 export function Theory() {
   return (
-    <section data-kin-reveal className="kin-col mt-[120px] flex flex-col items-start gap-[36px]">
-      <h2 className="w-full text-[30px] font-semibold leading-[normal] text-[#242424]">
+    <section data-kin-reveal className="kin-col kin-gap flex flex-col items-start gap-[36px]">
+      <h2 className="kin-h-trim w-full text-[30px] font-semibold leading-[normal] text-[#242424]">
         {THEORY.titleDesktop}
       </h2>
 
-      <div className="grid w-full grid-cols-4 items-stretch gap-[20px]">
+      <div className="grid w-full grid-cols-3 items-stretch gap-[20px]">
         <div className="flex min-w-0 flex-col items-start gap-[20px]">
           <div className={`${CARD} w-full gap-[28px]`}>
             <p className={CARD_TITLE}>{THEORY.clear.title}</p>
@@ -30,18 +30,16 @@ export function Theory() {
           </div>
         </div>
 
-        <div className={`${CARD} min-w-0 justify-between`}>
-          <p className={CARD_TITLE}>{THEORY.kinesiology.title}</p>
-          <p className={CARD_BODY}>{THEORY.kinesiology.body}</p>
-        </div>
-
-        <div className="flex min-w-0 flex-col items-start gap-[20px]">
-          <div className="relative min-h-px w-full flex-1 overflow-hidden rounded-[16px]">
-            <Img
-              src={A.anatomyShoulder}
-              alt="Анатомия плечевого сустава"
-              className="absolute left-0 top-[-133.37%] h-[467.77%] w-full max-w-none"
-            />
+        <div className="flex min-w-0 flex-col items-start justify-between gap-[20px]">
+          <div className={`${CARD} w-full gap-[28px]`}>
+            <p className={CARD_TITLE}>{THEORY.breathing.title}</p>
+            <p className={CARD_BODY}>
+              {THEORY.breathing.bodyLines[0]}
+              <br />
+              {THEORY.breathing.bodyLines[1]}
+              <br />
+              {THEORY.breathing.bodyLines[2]}
+            </p>
           </div>
           <div className={`${CARD} w-full gap-[28px]`}>
             <p className={CARD_TITLE}>{THEORY.anatomy.title}</p>
@@ -55,15 +53,13 @@ export function Theory() {
           </div>
         </div>
 
-        <div className={`${CARD} min-w-0 justify-between`}>
-          <p className={CARD_TITLE}>{THEORY.breathing.title}</p>
-          <p className={CARD_BODY}>
-            {THEORY.breathing.bodyLines[0]}
-            <br />
-            {THEORY.breathing.bodyLines[1]}
-            <br />
-            {THEORY.breathing.bodyLines[2]}
-          </p>
+        {/* Portrait shot in a landscape box: cover, framed on the lit shoulder. */}
+        <div className="relative min-w-0 overflow-hidden rounded-[16px]">
+          <Img
+            src={A.anatomyShoulder}
+            alt="Анатомия плечевого сустава"
+            className="absolute inset-0 size-full max-w-none object-cover object-[center_16%]"
+          />
         </div>
       </div>
     </section>

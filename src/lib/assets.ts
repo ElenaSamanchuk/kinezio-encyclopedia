@@ -18,6 +18,8 @@ export const A = {
   theoryB: `${base}/theory-b.webp`,
   anatomyShoulder: `${base}/anatomy-shoulder.webp`,
   videoThumb: `${base}/video-thumb.webp`,
+  anglesVideo: `${base}/angles.mp4`,
+  anglesPoster: `${base}/angles-poster.webp`,
 
   phoneGlow: `${base}/phone-glow.webp`,
   phoneFrame: `${base}/phone-frame.webp`,

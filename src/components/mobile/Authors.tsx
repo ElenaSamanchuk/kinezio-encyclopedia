@@ -5,8 +5,8 @@ import { MaskedPhoto } from "@/components/ui/MaskedPhoto";
 
 export function Authors() {
   return (
-    <section data-kin-reveal id="authors" className="relative mt-[68px] h-[819px] w-[430px]">
-      <h2 className="font-display absolute left-1/2 top-0 w-[350px] -translate-x-1/2 text-center text-[24px] uppercase leading-[1.2] text-[#242424]">
+    <section data-kin-reveal id="authors" className="relative kin-gap h-[819px] w-[430px]">
+      <h2 className="kin-h-trim-display font-display absolute left-1/2 top-0 w-[350px] -translate-x-1/2 text-center text-[24px] uppercase leading-[1.2] text-[#242424]">
         {AUTHORS.title}
       </h2>
       <p className="absolute left-1/2 top-[82.375px] w-[406px] -translate-x-1/2 text-center text-[14px] font-medium leading-[1.3] text-[#363636]">

@@ -6,11 +6,11 @@ import { Wave } from "@/components/ui/Wave";
 
 export function FinalCta() {
   return (
-    <section data-kin-reveal className="relative mt-[68px] h-[376px] w-[430px] overflow-hidden bg-[#14161a]">
+    <section data-kin-cta-stop data-kin-reveal className="relative kin-gap h-[376px] w-[430px] overflow-hidden bg-[#14161a]">
       <Wave src={A.waveDark} inset={[-76.06, -114.87, -134.78, -148.84]} parent={[430, 376]} />
       <Wave src={A.waveDark} inset={[-49.73, -349.29, -161.11, 85.58]} parent={[430, 376]} />
 
-      <p className="font-display absolute left-[calc(50%+0.5px)] top-[40px] -translate-x-1/2 whitespace-nowrap text-center text-[24px] uppercase leading-[1.2] text-white opacity-60">
+      <p className="kin-h-trim-display font-display absolute left-[calc(50%+0.5px)] top-[40px] -translate-x-1/2 whitespace-nowrap text-center text-[24px] uppercase leading-[1.2] text-white opacity-60">
         {FINAL_CTA.faded}
       </p>
       <h2 className="font-display absolute left-[calc(50%+0.5px)] top-[85px] w-[301px] -translate-x-1/2 text-center text-[24px] uppercase leading-[1.2] text-white">

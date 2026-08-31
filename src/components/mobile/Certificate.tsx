@@ -4,8 +4,8 @@ import { CERTIFICATE } from "@/lib/content";
 
 export function Certificate() {
   return (
-    <section data-kin-reveal className="relative mt-[68px] h-[623px] w-[430px] overflow-hidden bg-white">
-      <h2 className="absolute left-[12px] top-[40px] w-[383px] text-[24px] font-semibold leading-[normal] text-[#242424]">
+    <section data-kin-reveal className="relative kin-gap h-[623px] w-[430px] overflow-hidden bg-white">
+      <h2 className="kin-h-trim absolute left-[12px] top-[40px] w-[383px] text-[24px] font-semibold leading-[normal] text-[#242424]">
         {CERTIFICATE.title}
       </h2>
 

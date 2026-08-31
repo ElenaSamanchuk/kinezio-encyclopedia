@@ -61,7 +61,7 @@ const KEEP_FONTS = {
 };
 const SALE_END_MS = Date.parse("2026-09-03T23:59:59+03:00");
 const CHECKOUT_FULL = "https://lk.kineziofitness.online/payments/tariff_nwn1gA/checkout";
-const CHECKOUT_CLUB = "https://lk.kineziofitness.online/payments/tariff_njRXeA/checkout";
+const SUPPORT_TG = "tg://resolve?domain=KINEZIOFITNESSCARE";
 const HERO_IMG = "figma/hero-trainer.webp";
 
 /**
@@ -766,6 +766,33 @@ function init(wrap){
     setInterval(tick,1000);
   }
 
+  /* Click-to-play video: hand the frame over to the native controls. */
+  wrap.addEventListener('click',function(e){
+    var play=e.target.closest&&e.target.closest('[data-kin-video-play]');
+    if(!play)return;
+    var box=play.closest('[data-kin-video]');
+    if(!box)return;
+    var video=box.querySelector('[data-kin-video-el]');
+    box.setAttribute('data-kin-playing','true');
+    if(video){video.controls=true;var p=video.play();if(p&&p.catch)p.catch(function(){});}
+  });
+
+  /* Sticky mobile CTA: out while a section with its own «Купить» is on screen. */
+  var sticky=wrap.querySelector('[data-kin-sticky-cta]');
+  var stops=[].slice.call(wrap.querySelectorAll('[data-kin-cta-stop]'));
+  if(sticky&&stops.length&&window.IntersectionObserver){
+    var shown=[];
+    var sio=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var i=shown.indexOf(entry.target);
+        if(entry.isIntersecting){if(i<0)shown.push(entry.target);}
+        else if(i>=0)shown.splice(i,1);
+      });
+      sticky.setAttribute('data-kin-show',shown.length?'false':'true');
+    },{rootMargin:'-15% 0px -15% 0px'});
+    stops.forEach(function(el){sio.observe(el);});
+  }
+
   /* Scroll reveal: fade/slide sections in once. */
   var nodes=[].slice.call(wrap.querySelectorAll('[data-kin-reveal]'));
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -942,7 +969,21 @@ ${scriptTag}
     io: finalJs.includes("IntersectionObserver") && finalJs.includes("kin-in"),
     buyBlank: pasteHtml.includes('target="_blank"') && pasteHtml.includes("noopener noreferrer"),
     checkoutFull: (pasteHtml.match(new RegExp(CHECKOUT_FULL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length >= 6,
-    checkoutClub: (pasteHtml.match(new RegExp(CHECKOUT_CLUB.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length >= 2,
+    supportTg: (pasteHtml.match(new RegExp(SUPPORT_TG.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length >= 2,
+    video:
+      desktop.includes("data-kin-video") &&
+      mobile.includes("data-kin-video") &&
+      finalJs.includes("data-kin-video-play") &&
+      pasteHtml.includes("figma/angles.mp4"),
+    stickyCta:
+      mobile.includes("data-kin-sticky-cta") &&
+      !desktop.includes("data-kin-sticky-cta") &&
+      mobile.includes("data-kin-cta-stop") &&
+      finalJs.includes("data-kin-sticky-cta"),
+    gapScale:
+      finalCss.includes("kin-gap") &&
+      finalCss.includes("kin-tail") &&
+      !/\bmt-\[(?:120|138|151|124|68)px\]/.test(pasteHtml),
   };
 
   const allOut = [...parts, combined, external];

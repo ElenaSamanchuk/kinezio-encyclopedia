@@ -1,13 +1,14 @@
 import { A } from "@/lib/assets";
 import { Img } from "@/components/ui/Img";
+import { VideoPlayer } from "@/components/ui/VideoPlayer";
 import { ANGLES } from "@/lib/content";
 import { Chip } from "@/components/ui/Chip";
 
 export function Angles() {
   return (
-    <section data-kin-reveal className="mx-auto mt-[68px] flex w-[406px] flex-col items-start gap-[40px]">
+    <section data-kin-reveal className="mx-auto kin-gap flex w-[406px] flex-col items-start gap-[40px]">
       <div className="relative h-[290px] w-full">
-        <h2 className="absolute left-0 top-0 w-[324px] text-[24px] font-semibold leading-[normal] text-[#242424]">
+        <h2 className="kin-h-trim absolute left-0 top-0 w-[324px] text-[24px] font-semibold leading-[normal] text-[#242424]">
           {ANGLES.title}
         </h2>
         <Chip
@@ -34,26 +35,14 @@ export function Angles() {
         </p>
       </div>
 
-      <div className="relative h-[228.375px] w-full shrink-0 overflow-hidden rounded-[15.82px]">
-        <Img
-          src={A.videoThumb}
-          alt="Разбор упражнения с нескольких камер"
-          className="absolute inset-0 size-full max-w-none object-cover"
-        />
-        <div className="absolute inset-0 bg-[rgba(0,0,0,0.4)]" />
-        <button
-          type="button"
-          aria-label="Смотреть превью"
-          className="absolute left-[182.38px] top-[93.57px] flex size-[41.234px] cursor-pointer items-center justify-center rounded-full bg-[rgba(255,255,255,0.4)] backdrop-blur-[7.159px]"
-        >
-          <Img
-            src={A.iconPlay}
-            alt=""
-            aria-hidden
-            className="h-[19.031px] w-[16.652px] pl-[2px]"
-          />
-        </button>
-      </div>
+      <VideoPlayer
+        src={A.anglesVideo}
+        poster={A.anglesPoster}
+        label="Смотреть разбор упражнения"
+        className="h-[228.375px] w-full shrink-0 rounded-[15.82px]"
+        playClassName="size-[41.234px] backdrop-blur-[7.159px]"
+        iconClassName="h-[19.031px] w-[16.652px] pl-[2px]"
+      />
     </section>
   );
 }

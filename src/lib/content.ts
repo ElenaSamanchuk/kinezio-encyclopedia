@@ -14,8 +14,8 @@ export const HERO_CHIPS = [
   { label: "> 50 разборов упражнений", dark: false },
   { label: "30 коррекционных упражнений", dark: false },
   { label: "Работа с осанкой", dark: false },
-  { label: "Выгодное продление", dark: false },
   { label: "Доступ на 2 месяца", dark: true },
+  { label: "Выгодное продление", dark: false },
 ] as const;
 
 export const PRICE = {
@@ -38,6 +38,9 @@ export const CHECKOUT = {
   full: "https://lk.kineziofitness.online/payments/tariff_nwn1gA/checkout",
   club: "https://lk.kineziofitness.online/payments/tariff_njRXeA/checkout",
 } as const;
+
+/** Клиенты KINEZIO пишут в поддержку за персональным предложением. */
+export const SUPPORT_TG = "tg://resolve?domain=KINEZIOFITNESSCARE";
 
 export const INTRO = {
   captionLeft: "Знакомая «Анатомия движения» в новом формате",
@@ -71,7 +74,7 @@ export const MODULES = [
     label: "Модуль 2",
     title: "Техника выполнения упражнений",
     lead: "Поймёшь, почему упражнение выполняется так и никак иначе. Разберёшься, как адаптировать любую нагрузку под любого клиента",
-    body: "Более 50 разборов с нескольких камер и анатомической визуализацией. Техника, ошибки, работающие мышцы и влияние хвата, рукоятки, положения тела и вектора усилия",
+    body: "Более 50 разборов с нескольких камер и анатомической визуализацией. Техника, ошибки, целевые мышечные группы и влияние хвата, рукоятки, положения тела и вектора усилия",
   },
   {
     label: "Модуль 3",
@@ -211,12 +214,16 @@ export const CERTIFICATE = {
   ],
 } as const;
 
+/** Плавающая кнопка на мобильной вёрстке. */
+export const STICKY_CTA = "Купить";
+
 export const PRICING = {
   title: "Стоимость курса",
   main: { title: "Энциклопедия тренера", body: "2 месяца доступа" },
   club: {
     title: "Условия для клиентов KINEZIO FITNESS",
     body: "Если вы уже покупали продукты KINEZIO, ищите персональное предложение на почте или напишите в поддержку",
+    cta: "Написать в поддержку",
   },
 } as const;
 

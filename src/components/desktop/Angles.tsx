@@ -1,29 +1,23 @@
 import { A } from "@/lib/assets";
 import { Img } from "@/components/ui/Img";
+import { VideoPlayer } from "@/components/ui/VideoPlayer";
 import { ANGLES } from "@/lib/content";
 import { Chip } from "@/components/ui/Chip";
 
 export function Angles() {
   return (
-    <section data-kin-reveal className="kin-col mt-[138px] flex items-start gap-[52px]">
-      <div className="relative h-[288px] w-[512px] shrink-0 overflow-hidden rounded-[20px]">
-        <Img
-          src={A.videoThumb}
-          alt="Разбор упражнения с нескольких камер"
-          className="absolute inset-0 size-full max-w-none object-cover"
-        />
-        <div className="absolute inset-0 bg-[rgba(0,0,0,0.4)]" />
-        <button
-          type="button"
-          aria-label="Смотреть превью"
-          className="absolute left-[230px] top-[118px] flex size-[52px] cursor-pointer items-center justify-center rounded-full bg-[rgba(255,255,255,0.4)] backdrop-blur-[9.05px] transition-transform hover:scale-105"
-        >
-          <Img src={A.iconPlay} alt="" aria-hidden className="h-[24px] w-[21px] pl-[3px]" />
-        </button>
-      </div>
+    <section data-kin-reveal className="kin-col kin-gap flex items-start gap-[52px]">
+      <VideoPlayer
+        src={A.anglesVideo}
+        poster={A.anglesPoster}
+        label="Смотреть разбор упражнения"
+        className="h-[288px] w-[512px] shrink-0 rounded-[20px]"
+        playClassName="size-[52px] backdrop-blur-[9.05px]"
+        iconClassName="h-[24px] w-[21px] pl-[3px]"
+      />
 
       <div className="relative h-[288px] min-w-0 flex-1">
-        <h2 className="absolute left-0 top-0 w-[395px] text-[30px] font-semibold leading-[normal] text-[#242424]">
+        <h2 className="kin-h-trim absolute left-0 top-0 w-[395px] text-[30px] font-semibold leading-[normal] text-[#242424]">
           {ANGLES.title}
         </h2>
         <Chip

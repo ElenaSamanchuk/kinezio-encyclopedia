@@ -1,11 +1,11 @@
-import { PRICE, PRICING } from "@/lib/content";
+import { PRICE, PRICING, SUPPORT_TG } from "@/lib/content";
 import { BuyButton } from "@/components/ui/BuyButton";
 import { Chip } from "@/components/ui/Chip";
 
 export function Pricing() {
   return (
-    <section data-kin-reveal id="pricing" className="mx-auto mt-[68px] flex w-[406px] flex-col items-start gap-[24px]">
-      <h2 className="font-display w-full text-[24px] uppercase leading-[1.5] text-[#242424]">
+    <section data-kin-cta-stop data-kin-reveal id="pricing" className="mx-auto kin-gap flex w-[406px] flex-col items-start gap-[24px]">
+      <h2 className="kin-h-trim-display font-display w-full text-[24px] uppercase leading-[1.5] text-[#242424]">
         {PRICING.title}
       </h2>
 
@@ -23,7 +23,7 @@ export function Pricing() {
             <p className="w-full text-[16px] font-bold leading-[21px]">{PRICING.club.title}</p>
             <p className="w-full text-[14px] font-medium leading-[18px]">{PRICING.club.body}</p>
           </div>
-          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} buttonText="text-[16px] leading-[19px] tracking-[-0.48px]" plan="club" />
+          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} buttonText="text-[16px] leading-[19px] tracking-[-0.48px]" plan="club" href={SUPPORT_TG} cta={PRICING.club.cta} />
         </article>
       </div>
     </section>
@@ -35,11 +35,15 @@ function Foot({
   badge,
   buttonText,
   plan,
+  href,
+  cta,
 }: {
   price: string;
   badge: string;
   buttonText: string;
   plan: "full" | "club";
+  href?: string;
+  cta?: string;
 }) {
   return (
     <div className="flex w-full flex-col items-start gap-[16px]">
@@ -56,7 +60,9 @@ function Foot({
           </Chip>
         </div>
       </div>
-      <BuyButton plan={plan} className={`w-full px-[60px] py-[16px] font-bold ${buttonText}`} />
+      <BuyButton plan={plan} href={href} className={`w-full px-[24px] py-[16px] font-bold ${buttonText}`}>
+        {cta}
+      </BuyButton>
     </div>
   );
 }

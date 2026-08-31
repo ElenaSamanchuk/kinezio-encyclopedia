@@ -207,3 +207,78 @@ body {
 [data-kin-canvas="1440"] .kin-bleed-dark {
   --kin-bleed: #14161a;
 }
+
+/*
+ * Click-to-play video. The poster + custom play button sit in one overlay that
+ * fades out once `data-kin-playing` flips (React on the site, the Tilda JS
+ * runtime on Tilda), handing the frame over to the native controls.
+ */
+[data-kin-video] video {
+  background: #000;
+}
+[data-kin-video][data-kin-playing="true"] [data-kin-video-play] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/*
+ * Mobile sticky CTA. Sits outside the zoomed canvas, so it is measured in real
+ * CSS pixels and stays put while the page scrolls. Hidden until the observer
+ * reports that no section with its own «Купить» is on screen.
+ */
+[data-kin-sticky-cta] {
+  opacity: 0;
+  transform: translateY(160%);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+}
+[data-kin-sticky-cta][data-kin-show="true"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-kin-sticky-cta] {
+    transition: none;
+  }
+}
+
+/*
+ * Vertical rhythm between blocks. One step per artboard — desktop 80 / mobile
+ * 40 — so the scale lives here instead of a per-section `mt-[…]`. The step
+ * equals the bottom padding the backgrounded sections already carry from the
+ * design, so a white block followed by a gap reads as one even rhythm instead
+ * of two different spaces stacked. The page tail matches the step.
+ */
+[data-kin-canvas="1440"] .kin-gap {
+  margin-top: 80px;
+}
+[data-kin-canvas="1440"] .kin-tail {
+  padding-bottom: 80px;
+}
+[data-kin-canvas="430"] .kin-gap {
+  margin-top: 40px;
+}
+[data-kin-canvas="430"] .kin-tail {
+  padding-bottom: 40px;
+}
+
+/*
+ * Optical trim for headings that open a block. Manrope's line box carries
+ * ~0.36em of blank space above the cap height, so a heading sits visually
+ * further from the previous block than a card edge or a photo does — the same
+ * 40/80px gap then reads as two different spaces. Pull the box back by that
+ * blank so every gap in the rhythm measures the same distance edge-to-ink.
+ * Blocks with their own background are excluded: there the visible boundary is
+ * the background box, not the text.
+ */
+.kin-h-trim {
+  margin-top: -0.363em;
+}
+/* The display face sits tighter in its line box than Manrope does. */
+.kin-h-trim-display {
+  margin-top: -0.296em;
+}

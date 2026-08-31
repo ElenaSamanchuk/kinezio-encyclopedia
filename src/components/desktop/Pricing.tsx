@@ -1,11 +1,11 @@
-import { PRICE, PRICING } from "@/lib/content";
+import { PRICE, PRICING, SUPPORT_TG } from "@/lib/content";
 import { BuyButton } from "@/components/ui/BuyButton";
 import { Chip } from "@/components/ui/Chip";
 
 export function Pricing() {
   return (
-    <section data-kin-reveal id="pricing" className="kin-col mt-[151px] flex flex-col items-start gap-[36px]">
-      <h2 className="font-display w-full text-[30px] uppercase leading-[1.5] text-[#242424]">
+    <section data-kin-reveal id="pricing" className="kin-col kin-gap flex flex-col items-start gap-[36px]">
+      <h2 className="kin-h-trim-display font-display w-full text-[30px] uppercase leading-[1.5] text-[#242424]">
         {PRICING.title}
       </h2>
 
@@ -23,7 +23,7 @@ export function Pricing() {
             <p className="w-full text-[16px] font-bold leading-[1.3]">{PRICING.club.title}</p>
             <p className="w-full text-[14px] font-medium leading-[1.3]">{PRICING.club.body}</p>
           </div>
-          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} plan="club" />
+          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} plan="club" href={SUPPORT_TG} cta={PRICING.club.cta} />
         </article>
       </div>
     </section>
@@ -34,13 +34,21 @@ function Foot({
   price,
   badge,
   plan,
+  href,
+  cta,
 }: {
   price: string;
   badge: string;
   plan: "full" | "club";
+  href?: string;
+  cta?: string;
 }) {
+  // «Написать в поддержку» is three times the width of «Купить» and does not fit
+  // beside the price block, so the club card stacks its footer instead.
   return (
-    <div className="flex w-full items-end justify-between">
+    <div
+      className={`flex w-full ${cta ? "flex-col items-start gap-[24px]" : "items-end justify-between"}`}
+    >
       <div className="flex flex-col items-start gap-[16px]">
         <p className="font-display whitespace-nowrap text-[30px] uppercase leading-[1.2] text-[#e42525]">
           {price}
@@ -54,7 +62,13 @@ function Foot({
           </Chip>
         </div>
       </div>
-      <BuyButton plan={plan} className="shrink-0 px-[60px] py-[20px] text-[16px] font-bold tracking-[-0.48px]" />
+      <BuyButton
+        plan={plan}
+        href={href}
+        className={`shrink-0 py-[20px] text-[16px] font-bold tracking-[-0.48px] ${cta ? "px-[40px]" : "px-[60px]"}`}
+      >
+        {cta}
+      </BuyButton>
     </div>
   );
 }

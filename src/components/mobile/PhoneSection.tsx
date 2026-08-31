@@ -5,7 +5,7 @@ import { Chip } from "@/components/ui/Chip";
 
 export function PhoneSection() {
   return (
-    <section data-kin-reveal className="relative mx-auto mt-[68px] h-[794px] w-[406px] overflow-hidden rounded-[24px] bg-[#14161a]">
+    <section data-kin-reveal className="relative mx-auto kin-gap h-[794px] w-[406px] overflow-hidden rounded-[24px] bg-[#14161a]">
       <Img
         src={A.phoneGlow}
         alt=""
@@ -13,7 +13,7 @@ export function PhoneSection() {
         className="pointer-events-none absolute left-[629px] top-[-115px] size-[442px] max-w-none mix-blend-overlay"
       />
 
-      <h2 className="font-display absolute left-1/2 top-[40px] w-[352px] -translate-x-1/2 text-center text-[24px] uppercase leading-[1.2] text-white">
+      <h2 className="kin-h-trim-display font-display absolute left-1/2 top-[40px] w-[352px] -translate-x-1/2 text-center text-[24px] uppercase leading-[1.2] text-white">
         {PHONE.title}
       </h2>
 

@@ -6,9 +6,9 @@ const STEP_ICON = [A.iconModules, A.iconTeacher, A.iconCertificate];
 
 export function Certificate() {
   return (
-    <section data-kin-reveal className="kin-bleed kin-bleed-white relative mt-[120px] h-[419px] w-full bg-white">
+    <section data-kin-reveal className="kin-bleed kin-bleed-white relative kin-gap h-[419px] w-full bg-white">
       <div className="absolute inset-0 overflow-hidden">
-      <h2 className="absolute left-[120px] top-[60px] w-[537px] text-[30px] font-semibold leading-[normal] text-[#242424]">
+      <h2 className="kin-h-trim absolute left-[120px] top-[60px] w-[537px] text-[30px] font-semibold leading-[normal] text-[#242424]">
         {CERTIFICATE.title}
       </h2>
 

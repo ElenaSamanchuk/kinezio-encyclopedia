@@ -4,8 +4,8 @@ export function Modules() {
   const [m1, m2, m3, m4] = MODULES;
 
   return (
-    <section data-kin-reveal id="program" className="mx-auto mt-[68px] flex w-[406px] flex-col items-start gap-[24px]">
-      <h2 className="w-full text-[24px] font-semibold leading-[33px] text-[#242424]">Что находится внутри</h2>
+    <section data-kin-reveal id="program" className="mx-auto kin-gap flex w-[406px] flex-col items-start gap-[24px]">
+      <h2 className="kin-h-trim w-full text-[24px] font-semibold leading-[33px] text-[#242424]">Что находится внутри</h2>
 
       <div className="flex w-full flex-col items-start gap-[16px]">
         <Card label={m1.label} title={m1.title} lead={m1.lead} body={m1.body} />
