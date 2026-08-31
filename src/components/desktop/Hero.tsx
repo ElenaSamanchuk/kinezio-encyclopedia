@@ -7,7 +7,7 @@ import { Img } from "@/components/ui/Img";
 
 export function Hero() {
   return (
-    <section id="top" className="relative h-[717px] w-full bg-[#f5f5f5]">
+    <section id="top" className="kin-bleed relative h-[717px] w-full bg-[#f5f5f5]">
       <div className="kin-bleed kin-bleed-white absolute left-0 top-0 h-[714px] w-full bg-white" />
 
       <div className="absolute left-[23px] top-[23px] h-[694px] w-[1394px] overflow-hidden rounded-[28px]">
