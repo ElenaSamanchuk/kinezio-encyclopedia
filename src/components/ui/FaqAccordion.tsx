@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Img } from "@/components/ui/Img";
 import { A } from "@/lib/assets";
 import type { FaqItem } from "@/lib/content";
 
@@ -27,8 +28,8 @@ export function FaqAccordion({
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
-          // The open state lives in `data-kin-open` so the exported markup can be
-          // driven by plain JS in the Tilda build, where React is not present.
+          // Open state lives in `data-kin-open` so the Tilda JS runtime can
+          // drive the accordion. Height is CSS grid-template-rows, not display:none.
           <div
             key={item.q}
             data-kin-faq-item
@@ -46,20 +47,21 @@ export function FaqAccordion({
               >
                 {item.q}
               </span>
-              <img
+              <Img
                 src={A.iconChevron}
                 alt=""
                 aria-hidden
                 data-kin-faq-chevron
-                className="size-[24px] shrink-0 transition-transform duration-200"
+                className="size-[24px] shrink-0"
               />
             </button>
-            <p
-              data-kin-faq-answer
-              className={`mt-[16px] font-medium leading-[1.3] text-[#8a8e96] ${answerClass}`}
-            >
-              {item.a}
-            </p>
+            <div data-kin-faq-answer>
+              <div>
+                <p className={`pt-[16px] font-medium leading-[1.3] text-[#8a8e96] ${answerClass}`}>
+                  {item.a}
+                </p>
+              </div>
+            </div>
           </div>
         );
       })}

@@ -29,7 +29,6 @@
   --color-dark-card: var(--dark-card);
   --font-sans: var(--font-manrope);
   --font-display: var(--font-display);
-  --font-logo: var(--font-geist);
 }
 
 html {
@@ -40,19 +39,35 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-manrope), system-ui, sans-serif;
+  font-weight: 500;
   overflow-x: clip;
 }
 
-/* Figma display face is "Murs Gothic Wide Dark"; Unbounded is the closest
-   web-available substitute, tightened slightly to keep the same set widths. */
-.font-display {
-  font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.045em;
+/*
+ * The real display face from the design, self-hosted. Declared across the whole
+ * weight range so the single Dark cut answers every font-weight and the browser
+ * never synthesises a fake bold. Lives in /type (not /public/fonts, which the
+ * Tilda build wipes and refills with hashed next/font files).
+ */
+@font-face {
+  font-family: "Murs Gothic Wide Dark";
+  src:
+    url("/type/murs-gothic-wide-dark.woff2") format("woff2"),
+    url("/type/murs-gothic-wide-dark.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
 
-.font-logo {
-  font-family: var(--font-geist), system-ui, sans-serif;
+/* Name the family literally: `var(--font-display)` is circular in @theme and
+   invalid on Tilda unless the Next hashed class is on .kin-root — then the
+   whole `font-family` declaration drops and headings inherit Manrope/Exo 2.
+   The face has no ₽ glyph, so Manrope must stay next in the stack. */
+.font-display {
+  font-family: "Murs Gothic Wide Dark", var(--font-manrope, system-ui), sans-serif;
+  font-weight: 400;
+  letter-spacing: normal;
+  font-synthesis-weight: none;
 }
 
 /* ---- gradients & shadows lifted verbatim from the Figma nodes ---- */
@@ -94,12 +109,53 @@ body {
 }
 
 /* FAQ open/closed is expressed through data attributes so the static Tilda
-   export can drive it without React. */
-[data-kin-faq-item][data-kin-open="false"] > [data-kin-faq-answer] {
-  display: none;
+   export can drive it without React. Height animates via grid-template-rows. */
+[data-kin-faq-item] [data-kin-faq-answer] {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.5s ease,
+    opacity 0.45s ease;
+}
+[data-kin-faq-item][data-kin-open="true"] [data-kin-faq-answer] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+[data-kin-faq-item] [data-kin-faq-answer] > * {
+  overflow: hidden;
+  min-height: 0;
+}
+[data-kin-faq-item] [data-kin-faq-chevron] {
+  transition: transform 0.5s ease;
 }
 [data-kin-faq-item][data-kin-open="true"] [data-kin-faq-chevron] {
   transform: rotate(180deg);
+}
+
+/* Scroll reveal — Tilda JS / Canvas observer toggle `.kin-in`. */
+[data-kin-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.55s ease;
+}
+[data-kin-reveal].kin-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-kin-faq-item] [data-kin-faq-answer],
+  [data-kin-faq-item] [data-kin-faq-chevron],
+  [data-kin-reveal] {
+    transition: none;
+  }
+  [data-kin-reveal] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Wave decoration: the Figma node is a -23.07deg rotated vector sheet. */
@@ -109,4 +165,45 @@ body {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   transform: rotate(-23.07deg);
+}
+
+/*
+ * Tilda header (#t-header rec742939927) is a Zero Block 1200 grid, centered
+ * with `left: calc(50% - 600px + Npx)` — no upscale at ≥1200. Inner nav
+ * sits 20px in, ЛК ends at 1182. Our 1440 artboard stays pixel-true; the
+ * visible text/card column is 1200 so it shares that grid (120px gutters).
+ */
+[data-kin-canvas="1440"] .kin-col {
+  width: 1160px;
+  margin-inline: auto;
+}
+
+/*
+ * Full-bleed solid fills on the desktop 1440 canvas.
+ * Background lives on ::before (not 100vw on the section itself) so inner
+ * layout stays 1440. Under `zoom` (viewport < 1440) 100vw is slightly
+ * small — the canvas already fills the viewport, so no gap. Do not put
+ * overflow:hidden on the same node as .kin-bleed or the pseudo is clipped.
+ */
+[data-kin-canvas="1440"] .kin-bleed {
+  --kin-bleed: var(--bg);
+  isolation: isolate;
+}
+[data-kin-canvas="1440"] .kin-bleed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  background: var(--kin-bleed);
+  z-index: -1;
+  pointer-events: none;
+}
+[data-kin-canvas="1440"] .kin-bleed-white {
+  --kin-bleed: #fff;
+}
+[data-kin-canvas="1440"] .kin-bleed-dark {
+  --kin-bleed: #14161a;
 }

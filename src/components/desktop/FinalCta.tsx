@@ -6,7 +6,8 @@ import { Wave } from "@/components/ui/Wave";
 
 export function FinalCta() {
   return (
-    <section className="relative mt-[124px] h-[425px] w-full overflow-hidden bg-[#14161a]">
+    <section data-kin-reveal className="kin-bleed kin-bleed-dark relative mt-[124px] h-[425px] w-full bg-[#14161a]">
+      <div className="absolute inset-0 overflow-hidden">
       <Wave src={A.waveDark} inset={[-117.18, 13.82, -57.83, -22.43]} parent={[1440, 425]} />
       <Wave src={A.waveDark} inset={[-44, -63.68, -131.01, 55.07]} parent={[1440, 425]} />
 
@@ -30,6 +31,7 @@ export function FinalCta() {
         dark
         className="absolute left-[calc(50%+0.5px)] top-[286px] -translate-x-1/2 px-[60px] py-[20px] text-[16px] font-bold uppercase tracking-[-0.48px]"
       />
+      </div>
     </section>
   );
 }

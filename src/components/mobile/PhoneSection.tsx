@@ -1,11 +1,12 @@
 import { A } from "@/lib/assets";
+import { Img } from "@/components/ui/Img";
 import { PHONE } from "@/lib/content";
 import { Chip } from "@/components/ui/Chip";
 
 export function PhoneSection() {
   return (
-    <section className="relative mx-auto mt-[68px] h-[794px] w-[406px] overflow-hidden rounded-[24px] bg-[#14161a]">
-      <img
+    <section data-kin-reveal className="relative mx-auto mt-[68px] h-[794px] w-[406px] overflow-hidden rounded-[24px] bg-[#14161a]">
+      <Img
         src={A.phoneGlow}
         alt=""
         aria-hidden
@@ -23,7 +24,7 @@ export function PhoneSection() {
         {PHONE.chipMobile}
       </Chip>
 
-      <p className="absolute left-[calc(50%+0.5px)] top-[213px] w-[341px] -translate-x-1/2 -translate-y-full text-center text-[14px] font-normal leading-[1.3] text-white">
+      <p className="absolute left-[calc(50%+0.5px)] top-[213px] w-[341px] -translate-x-1/2 -translate-y-full text-center text-[14px] font-medium leading-[1.3] text-white">
         {PHONE.lead}
       </p>
 
@@ -36,21 +37,21 @@ export function PhoneSection() {
             <p className="font-display text-[16px] uppercase leading-[1.3] text-[#ff6332]">
               {card.title}
             </p>
-            <p className="text-[12px] font-normal leading-[1.3] text-white">{card.body}</p>
+            <p className="text-[12px] font-medium leading-[1.3] text-white">{card.body}</p>
           </div>
         ))}
       </div>
 
       <div className="absolute left-[30.15px] top-[387px] h-[564px] w-[345.339px]">
         <div className="absolute inset-0 overflow-hidden">
-          <img
+          <Img
             src={A.phoneFrame}
             alt=""
             aria-hidden
             className="absolute left-[-35.51%] top-[-0.07%] h-[107.63%] w-[175.47%] max-w-none"
           />
         </div>
-        <img
+        <Img
           src={A.phoneScreen}
           alt="Мобильная версия платформы"
           className="absolute left-[66.16px] top-[45.99px] h-[484.12px] w-[224.309px] max-w-none rounded-[37.258px] object-cover"

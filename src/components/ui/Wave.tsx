@@ -1,3 +1,5 @@
+import { Img } from "@/components/ui/Img";
+
 /**
  * The diagonal light-sweep decoration. In Figma it is a -23.07deg rotated
  * vector sheet laid inside an oversized box; the box is given as inset
@@ -31,7 +33,7 @@ export function Wave({ src, inset, parent, className = "" }: WaveProps) {
       className={`pointer-events-none absolute flex items-center justify-center ${className}`}
       style={{ left, top, width, height }}
     >
-      <img
+      <Img
         src={src}
         alt=""
         className="block max-w-none shrink-0"

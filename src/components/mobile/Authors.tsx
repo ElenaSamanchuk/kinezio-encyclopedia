@@ -1,10 +1,11 @@
 import { A } from "@/lib/assets";
+import { Img } from "@/components/ui/Img";
 import { AUTHORS } from "@/lib/content";
 import { MaskedPhoto } from "@/components/ui/MaskedPhoto";
 
 export function Authors() {
   return (
-    <section id="authors" className="relative mt-[68px] h-[819px] w-[430px]">
+    <section data-kin-reveal id="authors" className="relative mt-[68px] h-[819px] w-[430px]">
       <h2 className="font-display absolute left-1/2 top-0 w-[350px] -translate-x-1/2 text-center text-[24px] uppercase leading-[1.2] text-[#242424]">
         {AUTHORS.title}
       </h2>
@@ -70,7 +71,7 @@ function AuthorCard({
         className="absolute flex size-[39px] items-center justify-center rounded-[11.7px] bg-[rgba(255,127,55,0.3)]"
         style={{ left: left + 8, top: top + 25 }}
       >
-        <img src={A.iconStarAlt} alt="" aria-hidden className="size-[18.72px]" />
+        <Img src={A.iconStarAlt} alt="" aria-hidden className="size-[18.72px]" />
       </div>
       <div
         className="absolute flex h-[90px] w-[199px] flex-col justify-center text-[12px] font-medium text-[#363636]"

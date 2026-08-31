@@ -6,7 +6,7 @@ import { Wave } from "@/components/ui/Wave";
 
 export function FinalCta() {
   return (
-    <section className="relative mt-[68px] h-[376px] w-[430px] overflow-hidden bg-[#14161a]">
+    <section data-kin-reveal className="relative mt-[68px] h-[376px] w-[430px] overflow-hidden bg-[#14161a]">
       <Wave src={A.waveDark} inset={[-76.06, -114.87, -134.78, -148.84]} parent={[430, 376]} />
       <Wave src={A.waveDark} inset={[-49.73, -349.29, -161.11, 85.58]} parent={[430, 376]} />
 

@@ -3,24 +3,24 @@ import { HERO, HERO_CHIPS, PRICE } from "@/lib/content";
 import { BuyButton } from "@/components/ui/BuyButton";
 import { Chip } from "@/components/ui/Chip";
 import { Countdown } from "@/components/ui/Countdown";
-import { Header } from "./Header";
+import { Img } from "@/components/ui/Img";
 
 export function Hero() {
   return (
-    <section id="top" className="relative h-[774px] w-full bg-[#f5f5f5]">
-      <div className="absolute left-0 top-0 h-[771px] w-full bg-white" />
-      <Header />
+    <section id="top" className="relative h-[717px] w-full bg-[#f5f5f5]">
+      <div className="kin-bleed kin-bleed-white absolute left-0 top-0 h-[714px] w-full bg-white" />
 
-      <div className="absolute left-[23px] top-[80px] h-[694px] w-[1394px] overflow-hidden rounded-[28px]">
+      <div className="absolute left-[23px] top-[23px] h-[694px] w-[1394px] overflow-hidden rounded-[28px]">
         <div className="grad-hero-d absolute inset-0 rounded-[28px]" />
 
-        <img
+        <Img
+          priority
           src={A.heroTrainer}
           alt="Тренер"
           className="pointer-events-none absolute left-[887px] top-0 h-[768px] w-[507px] max-w-none object-cover object-bottom"
         />
 
-        <div className="absolute left-[117px] top-[80px] flex w-[584px] flex-col items-start gap-[20px]">
+        <div className="absolute left-[97px] top-[80px] flex w-[584px] flex-col items-start gap-[20px]">
           <p className="font-display w-full text-[20px] uppercase leading-[1.2] text-[#8a8e96]">
             {HERO.eyebrowLead}
             <span className="text-[#ff6332]">{HERO.eyebrowAccent}</span>
@@ -35,7 +35,7 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="absolute left-[117px] top-[360px] flex w-[657px] flex-wrap content-start items-start gap-[15px]">
+        <div className="absolute left-[97px] top-[360px] flex w-[657px] flex-wrap content-start items-start gap-[15px]">
           {HERO_CHIPS.map((chip) => (
             <Chip
               key={chip.label}
@@ -47,9 +47,9 @@ export function Hero() {
           ))}
         </div>
 
-        <div className="shadow-hero-card absolute left-[117px] top-[467px] h-[167px] w-[587px] rounded-[16px] bg-white" />
+        <div className="shadow-hero-card absolute left-[97px] top-[467px] h-[167px] w-[587px] rounded-[16px] bg-white" />
 
-        <div className="absolute left-[141px] top-[491px] flex w-[242px] flex-col items-start gap-[24px]">
+        <div className="absolute left-[121px] top-[491px] flex w-[242px] flex-col items-start gap-[24px]">
           <div className="flex w-full items-center gap-[12px] whitespace-nowrap uppercase leading-[1.2]">
             <span className="font-display text-[30px] text-[#e42525]">{PRICE.now}</span>
             <span className="text-[20px] font-semibold text-[#242424] line-through decoration-solid">
@@ -59,7 +59,7 @@ export function Hero() {
           <BuyButton className="w-[291px] py-[20px] text-[16px] font-bold uppercase tracking-[-0.48px]" />
         </div>
 
-        <div className="absolute left-[483px] top-[475px] flex h-[151px] w-[214px] flex-col items-center gap-[27px] rounded-[12px] border border-solid border-[#ebebeb] bg-white p-[16px]">
+        <div className="absolute left-[463px] top-[475px] flex h-[151px] w-[214px] flex-col items-center gap-[27px] rounded-[12px] border border-solid border-[#ebebeb] bg-white p-[16px]">
           <Chip tone="redSoft" className="whitespace-nowrap text-center text-[12px] font-semibold leading-[1.3]">
             {PRICE.discountLabel}
           </Chip>

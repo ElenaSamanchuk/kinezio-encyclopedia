@@ -1,25 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Manrope, Unbounded } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-const unbounded = Unbounded({
-  variable: "--font-display",
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const geist = Geist({
-  variable: "--font-geist",
-  subsets: ["latin"],
-  weight: ["900"],
+  weight: ["500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -40,9 +26,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru">
-      <body
-        className={`${manrope.variable} ${unbounded.variable} ${geist.variable} antialiased`}
-      >
+      <body className={`${manrope.variable} antialiased`}>
         {children}
       </body>
     </html>

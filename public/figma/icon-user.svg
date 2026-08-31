@@ -1,8 +1,1 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="12" height="12.7" viewBox="0 0 12 12.7" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="user">
-<path id="Vector" d="M6.5 6C7.88071 6 9 4.88071 9 3.5C9 2.11929 7.88071 1 6.5 1C5.11929 1 4 2.11929 4 3.5C4 4.88071 5.11929 6 6.5 6Z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_2" d="M11 12C11 9.78857 8.98312 8 6.5 8C4.01688 8 2 9.78857 2 12" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<g id="Vector_3" opacity="0">
-</g>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12.7" fill="none" overflow="visible" preserveAspectRatio="none" style="display:block" viewBox="0 0 12 12.7"><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M6.5 6C7.8807 6 9 4.8807 9 3.5S7.8807 1 6.5 1 4 2.1193 4 3.5 5.1193 6 6.5 6m4.5 6c0-2.2114-2.0169-4-4.5-4S2 9.7886 2 12"/></svg>

@@ -16,7 +16,7 @@ import { Theory } from "./Theory";
 export function DesktopPage() {
   return (
     <Canvas width={1440}>
-      <div className="relative w-[1440px] bg-[#f5f5f5] pb-[106px]">
+      <div className="kin-bleed relative w-[1440px] bg-[#f5f5f5] pb-[106px]">
         <Hero />
         <Intro />
         <Modules />

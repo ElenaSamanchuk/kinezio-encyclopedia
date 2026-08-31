@@ -4,7 +4,7 @@ import { Wave } from "@/components/ui/Wave";
 
 export function Moment() {
   return (
-    <section className="relative mt-[68px] h-[531px] w-[430px] overflow-hidden">
+    <section data-kin-reveal className="relative mt-[68px] h-[531px] w-[430px] overflow-hidden">
       <div className="absolute left-[-80px] top-[-34px] h-[620px] w-[1566px] border border-solid border-[rgba(255,255,255,0.2)] bg-[#14161a]" />
       <Wave src={A.waveDark} inset={[-27.31, -118.49, -29.41, -40.47]} parent={[430, 531]} />
 

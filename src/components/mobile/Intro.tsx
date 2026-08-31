@@ -1,11 +1,12 @@
 import { A } from "@/lib/assets";
+import { Img } from "@/components/ui/Img";
 import { INTRO } from "@/lib/content";
 import { MaskedPhoto } from "@/components/ui/MaskedPhoto";
 import { Wave } from "@/components/ui/Wave";
 
 export function Intro() {
   return (
-    <section className="relative h-[555px] w-[430px] overflow-hidden bg-white">
+    <section data-kin-reveal className="relative h-[555px] w-[430px] overflow-hidden bg-white">
       <Wave src={A.waveLight} inset={[-51.35, -147.89, -59.24, -115.81]} parent={[430, 555]} />
 
       <p className="absolute left-[12px] top-[40px] w-[235px] text-[14px] font-semibold leading-[normal] text-[#242424]">
@@ -49,7 +50,7 @@ export function Intro() {
             "linear-gradient(83.22deg, rgb(255, 126, 85) 1.02%, rgb(255, 97, 47) 92.9%)",
         }}
       >
-        <img
+        <Img
           src={A.cardArm}
           alt=""
           aria-hidden

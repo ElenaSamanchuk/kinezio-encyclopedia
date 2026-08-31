@@ -7,7 +7,7 @@ export function Modules() {
   const [m1, m2, m3, m4] = MODULES;
 
   return (
-    <section id="program" className="mx-auto mt-[120px] flex w-[1160px] flex-col items-start gap-[36px]">
+    <section data-kin-reveal id="program" className="kin-col mt-[120px] flex flex-col items-start gap-[36px]">
       <h2 className="w-full text-[30px] font-semibold leading-[normal] text-[#242424]">Что находится внутри</h2>
 
       <div className="grid w-full grid-cols-2 gap-[24px]">

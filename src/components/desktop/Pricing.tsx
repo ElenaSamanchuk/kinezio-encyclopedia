@@ -4,7 +4,7 @@ import { Chip } from "@/components/ui/Chip";
 
 export function Pricing() {
   return (
-    <section id="pricing" className="mx-auto mt-[151px] flex w-[1160px] flex-col items-start gap-[36px]">
+    <section data-kin-reveal id="pricing" className="kin-col mt-[151px] flex flex-col items-start gap-[36px]">
       <h2 className="font-display w-full text-[30px] uppercase leading-[1.5] text-[#242424]">
         {PRICING.title}
       </h2>
@@ -15,7 +15,7 @@ export function Pricing() {
             <p className="w-full font-bold leading-[1.3]">{PRICING.main.title}</p>
             <p className="w-full font-medium leading-[1.3]">{PRICING.main.body}</p>
           </div>
-          <Foot price={PRICE.now} badge={PRICE.discountLabel} />
+          <Foot price={PRICE.now} badge={PRICE.discountLabel} plan="full" />
         </article>
 
         <article className="shadow-card flex min-w-px flex-1 flex-col items-start gap-[40px] self-stretch overflow-hidden rounded-[20px] bg-white p-[36px]">
@@ -23,14 +23,22 @@ export function Pricing() {
             <p className="w-full text-[16px] font-bold leading-[1.3]">{PRICING.club.title}</p>
             <p className="w-full text-[14px] font-medium leading-[1.3]">{PRICING.club.body}</p>
           </div>
-          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} />
+          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} plan="club" />
         </article>
       </div>
     </section>
   );
 }
 
-function Foot({ price, badge }: { price: string; badge: string }) {
+function Foot({
+  price,
+  badge,
+  plan,
+}: {
+  price: string;
+  badge: string;
+  plan: "full" | "club";
+}) {
   return (
     <div className="flex w-full items-end justify-between">
       <div className="flex flex-col items-start gap-[16px]">
@@ -46,7 +54,7 @@ function Foot({ price, badge }: { price: string; badge: string }) {
           </Chip>
         </div>
       </div>
-      <BuyButton className="shrink-0 px-[60px] py-[20px] text-[16px] font-bold tracking-[-0.48px]" />
+      <BuyButton plan={plan} className="shrink-0 px-[60px] py-[20px] text-[16px] font-bold tracking-[-0.48px]" />
     </div>
   );
 }

@@ -1,12 +1,13 @@
 import { A } from "@/lib/assets";
+import { Img } from "@/components/ui/Img";
 import { ANGLES } from "@/lib/content";
 import { Chip } from "@/components/ui/Chip";
 
 export function Angles() {
   return (
-    <section className="mx-auto mt-[138px] flex w-[1173px] items-start gap-[52px]">
+    <section data-kin-reveal className="kin-col mt-[138px] flex items-start gap-[52px]">
       <div className="relative h-[288px] w-[512px] shrink-0 overflow-hidden rounded-[20px]">
-        <img
+        <Img
           src={A.videoThumb}
           alt="Разбор упражнения с нескольких камер"
           className="absolute inset-0 size-full max-w-none object-cover"
@@ -17,11 +18,11 @@ export function Angles() {
           aria-label="Смотреть превью"
           className="absolute left-[230px] top-[118px] flex size-[52px] cursor-pointer items-center justify-center rounded-full bg-[rgba(255,255,255,0.4)] backdrop-blur-[9.05px] transition-transform hover:scale-105"
         >
-          <img src={A.iconPlay} alt="" aria-hidden className="h-[24px] w-[21px] pl-[3px]" />
+          <Img src={A.iconPlay} alt="" aria-hidden className="h-[24px] w-[21px] pl-[3px]" />
         </button>
       </div>
 
-      <div className="relative h-[288px] w-[609px] shrink-0">
+      <div className="relative h-[288px] min-w-0 flex-1">
         <h2 className="absolute left-0 top-0 w-[395px] text-[30px] font-semibold leading-[normal] text-[#242424]">
           {ANGLES.title}
         </h2>
@@ -33,10 +34,10 @@ export function Angles() {
         </Chip>
 
         <div className="absolute left-0 top-[176px] flex size-[50px] items-start rounded-[15px] bg-[rgba(255,127,55,0.3)] p-[13px]">
-          <img src={A.iconStarAlt} alt="" aria-hidden className="size-[24px]" />
+          <Img src={A.iconStarAlt} alt="" aria-hidden className="size-[24px]" />
         </div>
         <div className="absolute left-[300px] top-[176px] flex size-[50px] items-start rounded-[15px] bg-[rgba(255,127,55,0.3)] p-[13px]">
-          <img src={A.iconStarAlt} alt="" aria-hidden className="size-[24px]" />
+          <Img src={A.iconStarAlt} alt="" aria-hidden className="size-[24px]" />
         </div>
 
         <p className="absolute left-0 top-[244px] w-[268px] text-[14px] font-medium leading-[1.3] text-[#242424]">

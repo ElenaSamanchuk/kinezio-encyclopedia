@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "build:tilda": "next build && node scripts/build-tilda.mjs",
+    "optimize:assets": "node scripts/optimize-assets.mjs",
     "lint": "eslint"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.24",
     "sharp": "^0.35.4",
+    "svgo": "^4.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

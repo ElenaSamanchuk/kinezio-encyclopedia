@@ -3,7 +3,7 @@ import { FaqAccordion } from "@/components/ui/FaqAccordion";
 
 export function Faq() {
   return (
-    <section id="faq" className="mx-auto mt-[68px] flex w-[406px] flex-col items-start gap-[24px]">
+    <section data-kin-reveal id="faq" className="mx-auto mt-[68px] flex w-[406px] flex-col items-start gap-[24px]">
       <h2 className="w-full text-[24px] font-semibold leading-[normal] text-[#242424]">Вопросы и ответы</h2>
       <FaqAccordion
         items={FAQ_MOBILE}

@@ -1,13 +1,8 @@
 #!/usr/bin/env node
 /**
- * Re-encodes the raster assets in public/figma from the pristine originals in
- * assets-src/figma, in place and under the same filenames, so nothing else in
- * the repo (src/lib/assets.ts, the Tilda build, the jsDelivr URLs) has to change.
- *
- * The originals live outside public/ on purpose: anything under public/ is
- * copied into the static export and published to the CDN, and shipping a second
- * 7.9 MB copy that nothing references would defeat the point of the exercise.
- * They are also recoverable from git history at commit 64f8897.
+ * Rebuilds public/figma from the pristine originals in assets-src/figma:
+ *   - rasters → WebP (alpha preserved; JPEG-disguised-as-.png converted too)
+ *   - SVG     → svgo --precision 4, viewBox kept, IDs not minified
  *
  * Usage:
  *   node scripts/optimize-assets.mjs           # write public/figma
@@ -21,32 +16,32 @@
  * We keep 2x that for retina and never upscale, so an entry only bites when the
  * original actually carries more pixels than any screen can show.
  *
- * Encoding is chosen per file instead of globally, because these assets are not
- * homogeneous:
- *   - Opaque photographs quantise to a 256-colour palette almost for free
- *     (mean error well under one 8-bit step) and shrink by ~70%.
- *   - Anything with a soft alpha gradient — the masks, the phone frame, the
- *     cut-out trainer, the glow — must NOT be palettised: a PNG palette has to
- *     spend its 256 entries on colour *and* alpha, which visibly banded the
- *     alpha ramp in testing (max alpha error up to 197/255). Those files get a
- *     lossless re-encode with adaptive filtering instead.
- * Every candidate is measured against the exact reference pixels and the result
- * is gated on FIDELITY below, so a bad trade cannot slip through silently.
+ * WebP is lossy by default. Alpha ramps (phone frame, trainer cut-out, glow,
+ * CSS masks) are gated on maxAlpha so a halo cannot slip through; RGB error
+ * is allowed a little more room than the old PNG-palette pass because WebP's
+ * transform is coarser. If no lossy candidate clears the gate we fall back to
+ * lossless WebP.
  *
- * Four files are JPEGs that were saved with a .png extension (browsers sniff the
- * content, so they render fine). They are already efficiently compressed and
- * re-encoding would only add generation loss, so they are copied verbatim.
+ * Four files are JPEGs that were saved with a .png extension. They convert to
+ * WebP the same way as everything else.
+ *
+ * SVG IDs are not minified: several files share names like "Vector", and on a
+ * Tilda page inlined SVGs would collide if svgo rewrote them all to "a".
+ * Unused IDs are stripped; used ones (filter urls in mask-author) keep their
+ * original names.
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
+import { optimize as svgoOptimize } from "svgo";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const SRC_DIR = path.join(ROOT, "assets-src", "figma");
 const OUT_DIR = path.join(ROOT, "public", "figma");
 const DRY_RUN = process.argv.includes("--dry-run");
+const VERBOSE = process.argv.includes("--verbose");
 
 /** Largest CSS width each image is rendered at, measured in the browser. */
 const DISPLAY_WIDTH = {
@@ -73,37 +68,49 @@ const DISPLAY_WIDTH = {
   "video-thumb.png": 512,
 };
 
-/** Retina factor, and the minimum saving that justifies resampling at all. */
 const DPR = 2;
 const MIN_RESIZE_GAIN = 0.05;
 
 /**
  * Ceiling on the error a lossy candidate may introduce, per 8-bit channel.
- * meanRgb is the perceptual driver; maxRgb/maxAlpha are single-pixel outliers
- * that in practice sit on anti-aliased edges, so they get more headroom. Alpha
- * is still held tight: a banded alpha ramp reads as a halo around a cut-out,
- * which is far more visible than a slightly shifted colour.
+ * Alpha is held tight: a banded ramp reads as a halo around a cut-out.
+ * maxRgb is not gated — WebP routinely hits 255 on a single anti-aliased
+ * edge pixel even when meanRgb is ~2. meanRgb is the perceptual driver.
  */
-const FIDELITY = { maxAlpha: 24, meanRgb: 2.2, maxRgb: 120 };
+const FIDELITY = { maxAlpha: 16, meanRgb: 6 };
 
-const LOSSLESS = { palette: false, compressionLevel: 9, adaptiveFiltering: true };
-const PALETTE = { palette: true, colours: 256, dither: 1.0, quality: 100, effort: 10 };
+const WEBP_QUALITIES = [75, 82, 90];
 
-/**
- * Files consumed only as CSS `mask-image` with `mask-mode: alpha`
- * (see src/components/ui/MaskedPhoto.tsx). Their colour channels are never
- * sampled, and Figma left uncorrelated photo data in them, which is pure
- * compressed weight. We rewrite them as grey+alpha with grey pinned to white
- * and the alpha channel copied bit-for-bit: identical under `alpha` masking,
- * and also correct if a browser ever fell back to `luminance` masking, since
- * white luminance means "fully visible" and the alpha ramp still applies.
- */
 const ALPHA_ONLY_MASKS = new Set([
   "mask-photo1-d.png",
   "mask-photo1-m.png",
   "mask-photo2-d.png",
   "mask-photo2-m.png",
 ]);
+
+const SVGO_CONFIG = {
+  multipass: true,
+  floatPrecision: 4,
+  plugins: [
+    {
+      name: "preset-default",
+      params: {
+        overrides: {
+          // svgo 4 already keeps viewBox; do not minify IDs (Tilda inlining).
+          cleanupIds: { minify: false, remove: true },
+        },
+      },
+    },
+  ],
+};
+
+function webpName(pngName) {
+  return pngName.replace(/\.png$/i, ".webp");
+}
+
+function pipeline(srcPath, width) {
+  return width ? sharp(srcPath).resize({ width, kernel: "lanczos3" }) : sharp(srcPath);
+}
 
 async function encodeAlphaOnlyMask(srcPath) {
   const { data, info } = await sharp(srcPath).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -113,10 +120,9 @@ async function encodeAlphaOnlyMask(srcPath) {
     out[j + 1] = data[i + 3];
   }
   const buf = await sharp(out, { raw: { width: info.width, height: info.height, channels: 2 } })
-    .png(LOSSLESS)
+    .webp({ lossless: true, effort: 6 })
     .toBuffer();
 
-  // The alpha ramp is the entire payload here, so assert it survived exactly.
   const back = await sharp(buf).ensureAlpha().raw().toBuffer();
   for (let i = 0; i < data.length; i += 4) {
     if (back[i + 3] !== data[i + 3]) throw new Error(`Alpha changed in ${path.basename(srcPath)}`);
@@ -124,13 +130,13 @@ async function encodeAlphaOnlyMask(srcPath) {
   return { buf, width: info.width };
 }
 
-/** Alpha-weighted RGB error plus raw alpha error, both vs the reference pixels. */
 function measure(ref, got) {
   let rgbSum = 0;
   let rgbMax = 0;
   let alphaMax = 0;
   let visible = 0;
-  for (let i = 0; i < ref.length; i += 4) {
+  const n = Math.min(ref.length, got.length);
+  for (let i = 0; i < n; i += 4) {
     const a = ref[i + 3];
     const da = Math.abs(a - got[i + 3]);
     if (da > alphaMax) alphaMax = da;
@@ -145,30 +151,26 @@ function measure(ref, got) {
   return { meanRgb: visible ? rgbSum / (visible * 3) : 0, maxRgb: rgbMax, maxAlpha: alphaMax };
 }
 
-const passes = (m) =>
-  m.maxAlpha <= FIDELITY.maxAlpha && m.meanRgb <= FIDELITY.meanRgb && m.maxRgb <= FIDELITY.maxRgb;
+const passes = (m) => m.maxAlpha <= FIDELITY.maxAlpha && m.meanRgb <= FIDELITY.meanRgb;
 
-async function processFile(name) {
+async function processRaster(name) {
   const srcPath = path.join(SRC_DIR, name);
-  const outPath = path.join(OUT_DIR, name);
+  const outName = webpName(name);
+  const outPath = path.join(OUT_DIR, outName);
   const srcBytes = fs.statSync(srcPath).size;
   const meta = await sharp(srcPath).metadata();
-
-  // JPEG payloads wearing a .png name: already compact, copying avoids re-loss.
-  if (meta.format !== "png") {
-    if (!DRY_RUN) fs.copyFileSync(srcPath, outPath);
-    return { name, srcBytes, outBytes: srcBytes, note: `copied as-is (${meta.format})`, width: meta.width };
-  }
 
   if (ALPHA_ONLY_MASKS.has(name)) {
     const { buf, width } = await encodeAlphaOnlyMask(srcPath);
     if (!DRY_RUN) fs.writeFileSync(outPath, buf);
     return {
-      name,
+      kind: "raster",
+      name: outName,
+      srcName: name,
       srcBytes,
       outBytes: buf.length,
       width,
-      note: "grey+alpha mask · alpha bit-exact",
+      note: "grey+alpha mask · lossless webp · alpha bit-exact",
       rejected: [],
     };
   }
@@ -176,70 +178,90 @@ async function processFile(name) {
   const display = DISPLAY_WIDTH[name];
   if (!display) throw new Error(`No measured display width for ${name}`);
   const cap = display * DPR;
+  const hasAlpha = meta.hasAlpha === true;
 
-  /*
-   * Both widths are tried, not just the capped one: resampling a smooth
-   * gradient invents intermediate values and can compress *worse* than the
-   * original (phone-glow went 116K -> 339K when downscaled, but 116K -> 52K
-   * at its native size). Cheaper to measure both than to reason about it.
-   */
   const widths = [["native", null]];
   if (cap < meta.width * (1 - MIN_RESIZE_GAIN)) widths.push([`${meta.width}\u2192${cap}px`, cap]);
 
   const candidates = [];
   for (const [widthLabel, width] of widths) {
-    const pipeline = () =>
-      width ? sharp(srcPath).resize({ width, kernel: "lanczos3" }) : sharp(srcPath);
-    const ref = await pipeline().ensureAlpha().raw().toBuffer();
-
-    for (const [encLabel, opts] of [["lossless", LOSSLESS], ["palette", PALETTE]]) {
-      const buf = await pipeline().png(opts).toBuffer();
-      const m =
-        encLabel === "lossless"
-          ? { meanRgb: 0, maxRgb: 0, maxAlpha: 0 }
-          : measure(ref, await sharp(buf).ensureAlpha().raw().toBuffer());
+    const ref = await pipeline(srcPath, width).ensureAlpha().raw().toBuffer();
+    for (const q of WEBP_QUALITIES) {
+      const buf = await pipeline(srcPath, width)
+        .webp({ quality: q, alphaQuality: 100, effort: 4, smartSubsample: true })
+        .toBuffer();
+      const m = measure(ref, await sharp(buf).ensureAlpha().raw().toBuffer());
       candidates.push({
-        label: `${encLabel}${width ? " · " + widthLabel : ""}`,
-        enc: encLabel,
+        label: `q${q}${width ? " · " + widthLabel : ""}`,
         buf,
         width: width || meta.width,
         m,
         ok: passes(m),
       });
     }
+    // Soft-alpha glows can compress *smaller* lossless than lossy (phone-glow).
+    if (hasAlpha) {
+      const lossless = await pipeline(srcPath, width).webp({ lossless: true, effort: 4 }).toBuffer();
+      candidates.push({
+        label: `lossless${width ? " · " + widthLabel : ""}`,
+        buf: lossless,
+        width: width || meta.width,
+        m: { meanRgb: 0, maxRgb: 0, maxAlpha: 0 },
+        ok: true,
+      });
+    }
   }
 
-  // Smallest candidate that clears the fidelity gate, and that actually helps.
   const viable = candidates.filter((c) => c.ok).sort((a, b) => a.buf.length - b.buf.length);
-  const best = viable[0];
+  let best = viable[0];
   const rejected = candidates
     .filter((c) => !c.ok)
     .map((c) => `${c.label} (rgb ${c.m.meanRgb.toFixed(2)}/${c.m.maxRgb}, a ${c.m.maxAlpha})`);
 
-  if (!best || best.buf.length >= srcBytes) {
-    if (!DRY_RUN) fs.copyFileSync(srcPath, outPath);
-    return {
-      name,
-      srcBytes,
-      outBytes: srcBytes,
+  if (!best) {
+    const buf = await sharp(srcPath).webp({ lossless: true, effort: 4 }).toBuffer();
+    best = {
+      label: "lossless fallback",
+      buf,
       width: meta.width,
-      note: "kept original (no candidate was both faithful and smaller)",
-      rejected,
+      m: { meanRgb: 0, maxRgb: 0, maxAlpha: 0 },
     };
   }
 
   if (!DRY_RUN) fs.writeFileSync(outPath, best.buf);
   return {
-    name,
+    kind: "raster",
+    name: outName,
+    srcName: name,
     srcBytes,
     outBytes: best.buf.length,
     width: best.width,
-    note:
-      best.label +
-      (best.enc === "palette"
-        ? ` · err rgb ${best.m.meanRgb.toFixed(2)}/${best.m.maxRgb} alpha ${best.m.maxAlpha}`
-        : ""),
+    note: `${best.label} · err rgb ${best.m.meanRgb.toFixed(2)}/${best.m.maxRgb} alpha ${best.m.maxAlpha}`,
     rejected,
+  };
+}
+
+function processSvg(name) {
+  const srcPath = path.join(SRC_DIR, name);
+  const outPath = path.join(OUT_DIR, name);
+  const src = fs.readFileSync(srcPath, "utf8");
+  const srcBytes = Buffer.byteLength(src);
+  const result = svgoOptimize(src, { path: srcPath, ...SVGO_CONFIG });
+  if (result.error) throw new Error(`svgo failed on ${name}: ${result.error}`);
+
+  if (!/viewBox\s*=/.test(result.data)) {
+    throw new Error(`svgo dropped viewBox on ${name}`);
+  }
+
+  const outBytes = Buffer.byteLength(result.data);
+  if (!DRY_RUN) fs.writeFileSync(outPath, result.data);
+  return {
+    kind: "svg",
+    name,
+    srcName: name,
+    srcBytes,
+    outBytes,
+    note: outBytes < srcBytes ? "svgo precision 4 · viewBox kept · ids not minified" : "svgo (no smaller, still rewritten)",
   };
 }
 
@@ -250,29 +272,55 @@ if (!fs.existsSync(SRC_DIR)) {
 }
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
-const names = fs.readdirSync(SRC_DIR).filter((f) => /\.(png|jpe?g)$/i.test(f)).sort();
+const rasterNames = fs.readdirSync(SRC_DIR).filter((f) => /\.png$/i.test(f)).sort();
+const svgNames = fs.readdirSync(SRC_DIR).filter((f) => /\.svg$/i.test(f)).sort();
+
 const results = [];
-for (const name of names) results.push(await processFile(name));
+for (const name of rasterNames) results.push(await processRaster(name));
+for (const name of svgNames) results.push(processSvg(name));
 
-const totalSrc = results.reduce((n, r) => n + r.srcBytes, 0);
-const totalOut = results.reduce((n, r) => n + r.outBytes, 0);
-
-console.log(`${DRY_RUN ? "[dry run] " : ""}assets-src/figma -> public/figma\n`);
-console.log("file".padEnd(22) + "before".padStart(9) + "after".padStart(9) + "  saved  detail");
-for (const r of results.sort((a, b) => b.srcBytes - a.srcBytes)) {
-  const saved = r.srcBytes ? (1 - r.outBytes / r.srcBytes) * 100 : 0;
-  console.log(
-    r.name.replace(".png", "").padEnd(22) +
-      `${(r.srcBytes / 1024).toFixed(0)}K`.padStart(9) +
-      `${(r.outBytes / 1024).toFixed(0)}K`.padStart(9) +
-      `${saved.toFixed(0)}%`.padStart(7) +
-      "  " + r.note
-  );
-  if (process.argv.includes("--verbose")) {
-    for (const rej of r.rejected || []) console.log(" ".repeat(24) + "rejected: " + rej);
+if (!DRY_RUN) {
+  for (const name of rasterNames) {
+    const stale = path.join(OUT_DIR, name);
+    if (fs.existsSync(stale)) fs.unlinkSync(stale);
   }
 }
+
+const rasters = results.filter((r) => r.kind === "raster");
+const svgs = results.filter((r) => r.kind === "svg");
+const fmt = (n) => (n >= 1024 ? `${(n / 1024).toFixed(n >= 100 * 1024 ? 0 : 1)}K` : `${n}B`);
+
+function printGroup(title, rows, srcTotal, outTotal) {
+  console.log(`\n${DRY_RUN ? "[dry run] " : ""}${title}`);
+  console.log("file".padEnd(24) + "before".padStart(9) + "after".padStart(9) + "  saved  detail");
+  for (const r of rows.sort((a, b) => b.srcBytes - a.srcBytes)) {
+    const saved = r.srcBytes ? (1 - r.outBytes / r.srcBytes) * 100 : 0;
+    console.log(
+      (r.srcName || r.name).padEnd(24) +
+        fmt(r.srcBytes).padStart(9) +
+        fmt(r.outBytes).padStart(9) +
+        `${saved.toFixed(0)}%`.padStart(7) +
+        "  " +
+        r.note
+    );
+    if (VERBOSE) {
+      for (const rej of r.rejected || []) console.log(" ".repeat(24) + "rejected: " + rej);
+    }
+  }
+  console.log(
+    `${fmt(srcTotal)} → ${fmt(outTotal)} ` +
+      `(-${((1 - outTotal / srcTotal) * 100) | 0}%, ${fmt(srcTotal - outTotal)} saved)`
+  );
+}
+
+const rSrc = rasters.reduce((n, r) => n + r.srcBytes, 0);
+const rOut = rasters.reduce((n, r) => n + r.outBytes, 0);
+const sSrc = svgs.reduce((n, r) => n + r.srcBytes, 0);
+const sOut = svgs.reduce((n, r) => n + r.outBytes, 0);
+
+printGroup("SVG  assets-src/figma → public/figma", svgs, sSrc, sOut);
+printGroup("WebP assets-src/figma → public/figma", rasters, rSrc, rOut);
 console.log(
-  `\n${(totalSrc / 1024).toFixed(0)} KB -> ${(totalOut / 1024).toFixed(0)} KB ` +
-    `(-${(1 - totalOut / totalSrc) * 100 | 0}%, ${((totalSrc - totalOut) / 1024).toFixed(0)} KB saved)`
+  `\npublic/figma written. Raster originals stay in assets-src/figma (png); ` +
+    `SVG originals stay there too.`
 );

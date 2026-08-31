@@ -1,10 +1,11 @@
 import { A } from "@/lib/assets";
+import { Img } from "@/components/ui/Img";
 import { AUTHORS } from "@/lib/content";
 import { MaskedPhoto } from "@/components/ui/MaskedPhoto";
 
 export function Authors() {
   return (
-    <section id="authors" className="relative mt-[120px] h-[267px] w-full">
+    <section data-kin-reveal id="authors" className="relative mt-[120px] h-[267px] w-full">
       <h2 className="font-display absolute left-1/2 top-0 w-[319px] -translate-x-1/2 text-center text-[20px] uppercase leading-[1.2] text-[#242424]">
         {AUTHORS.title}
       </h2>
@@ -15,7 +16,7 @@ export function Authors() {
       </p>
 
       {/* Figma keeps a masked cut-out under the right photo card — the group clips it. */}
-      <div className="absolute left-[1040px] top-0 h-[267px] w-[260px] overflow-hidden">
+      <div className="absolute left-[1060px] top-0 h-[267px] w-[260px] overflow-hidden">
         <MaskedPhoto
           mask={A.maskAuthor}
           maskSize="290px 302px"
@@ -26,13 +27,13 @@ export function Authors() {
         />
       </div>
 
-      <img
+      <Img
         src={A.authorCardLeft}
         alt="Алексей Одинцов"
-        className="absolute left-[140px] top-[1px] h-[266px] w-[260px] rounded-[20px] object-cover"
+        className="absolute left-[120px] top-[1px] h-[266px] w-[260px] rounded-[20px] object-cover"
       />
-      <div className="absolute left-[1040px] top-0 h-[267px] w-[260px] overflow-hidden rounded-[20px]">
-        <img
+      <div className="absolute left-[1060px] top-0 h-[267px] w-[260px] overflow-hidden rounded-[20px]">
+        <Img
           src={A.authorCardRight}
           alt="Юрий Емельянов"
           className="absolute left-0 top-[-0.11%] h-[115.7%] w-full max-w-none"
@@ -40,11 +41,11 @@ export function Authors() {
       </div>
 
       <AuthorCard
-        left={440}
+        left={420}
         name={AUTHORS.alexey.name}
         roleLines={AUTHORS.alexey.roleLines}
       />
-      <AuthorCard left={740} name={AUTHORS.yuri.name} roleLines={AUTHORS.yuri.roleLines} />
+      <AuthorCard left={760} name={AUTHORS.yuri.name} roleLines={AUTHORS.yuri.roleLines} />
     </section>
   );
 }
@@ -68,7 +69,7 @@ function AuthorCard({
         className="absolute top-[202px] flex size-[39px] items-center justify-center rounded-[11.7px] bg-[rgba(255,127,55,0.3)]"
         style={{ left: left + 8 }}
       >
-        <img src={A.iconStar} alt="" aria-hidden className="size-[18.72px]" />
+        <Img src={A.iconStar} alt="" aria-hidden className="size-[18.72px]" />
       </div>
       <div
         className="absolute top-[177px] flex h-[90px] w-[203px] flex-col justify-center text-[12px] font-medium text-[#363636]"

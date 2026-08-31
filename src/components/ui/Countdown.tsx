@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SALE_END } from "@/lib/content";
+import { SALE_END, SALE_END_MS } from "@/lib/content";
 
 const UNITS = ["дня", "час", "мин", "сек"] as const;
 
@@ -31,7 +31,7 @@ export function Countdown({ className = "" }: { className?: string }) {
 
   return (
     <div
-      data-kin-countdown={SALE_END.getTime()}
+      data-kin-countdown={SALE_END_MS}
       className={`flex w-full items-center gap-[4px] whitespace-nowrap text-[#ff612f] ${className}`}
     >
       {UNITS.map((unit, i) => (

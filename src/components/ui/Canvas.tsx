@@ -30,7 +30,32 @@ export function Canvas({
 
     fit();
     window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
+
+    const nodes = el.querySelectorAll("[data-kin-reveal]");
+    const reduce =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let io: IntersectionObserver | undefined;
+    if (reduce || typeof IntersectionObserver === "undefined") {
+      nodes.forEach((node) => node.classList.add("kin-in"));
+    } else {
+      io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("kin-in");
+            io?.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      );
+      nodes.forEach((node) => io!.observe(node));
+    }
+
+    return () => {
+      window.removeEventListener("resize", fit);
+      io?.disconnect();
+    };
   }, [width]);
 
   return (

@@ -1,3 +1,5 @@
+import { Img } from "@/components/ui/Img";
+
 /** Reproduces Figma's alpha-mask groups (mask-image + mask-size + position). */
 type MaskedPhotoProps = {
   mask: string;
@@ -32,7 +34,7 @@ export function MaskedPhoto({
 
   return (
     <div className={`absolute overflow-hidden ${className}`} style={{ ...maskStyle, ...style }}>
-      <img src={src} alt="" className={imgClassName} />
+      <Img src={src} alt="" className={imgClassName} />
     </div>
   );
 }

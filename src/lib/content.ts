@@ -1,10 +1,3 @@
-export const NAV_LINKS = [
-  { href: "#modules", label: "Курсы" },
-  { href: "#authors", label: "О создателях курса" },
-  { href: "#program", label: "Программа курса" },
-  { href: "#faq", label: "Вопрос-ответ" },
-] as const;
-
 export const HERO = {
   eyebrowLead: "Без анатомии никуда. ",
   eyebrowAccent: "Это база",
@@ -33,8 +26,18 @@ export const PRICE = {
   kinezioLabel: "Скидка для клиентов KINEZIO",
 } as const;
 
-/** Sale ends at the end of 3 September 2026, local time. */
-export const SALE_END = new Date(2026, 8, 3, 23, 59, 59);
+/**
+ * Sale ends at 23:59:59 on 3 September 2026, Europe/Moscow (UTC+3).
+ * ISO-with-offset so the epoch is the same on every machine; do not use
+ * `new Date(2026, 8, 3, 23, 59, 59)` — that is the host timezone.
+ */
+export const SALE_END_MS = Date.parse("2026-09-03T23:59:59+03:00");
+export const SALE_END = new Date(SALE_END_MS);
+
+export const CHECKOUT = {
+  full: "https://lk.kineziofitness.online/payments/tariff_nwn1gA/checkout",
+  club: "https://lk.kineziofitness.online/payments/tariff_njRXeA/checkout",
+} as const;
 
 export const INTRO = {
   captionLeft: "Знакомая «Анатомия движения» в новом формате",

@@ -1,11 +1,12 @@
 import { A } from "@/lib/assets";
+import { Img } from "@/components/ui/Img";
 import { PHONE } from "@/lib/content";
 import { Chip } from "@/components/ui/Chip";
 
 export function PhoneSection() {
   return (
-    <section className="relative mx-auto mt-[120px] h-[515px] w-[1400px] overflow-hidden rounded-[28px] bg-[#14161a]">
-      <img
+    <section data-kin-reveal className="relative mx-auto mt-[120px] h-[515px] w-[1400px] overflow-hidden rounded-[28px] bg-[#14161a]">
+      <Img
         src={A.phoneGlow}
         alt=""
         aria-hidden
@@ -15,14 +16,14 @@ export function PhoneSection() {
       {/* phone mock-up */}
       <div className="absolute left-[100.357px] top-0 h-[685.35px] w-[419.642px]">
         <div className="absolute inset-0 overflow-hidden">
-          <img
+          <Img
             src={A.phoneFrame}
             alt=""
             aria-hidden
             className="absolute left-[-35.51%] top-[-0.07%] h-[107.63%] w-[175.47%] max-w-none"
           />
         </div>
-        <img
+        <Img
           src={A.phoneScreen}
           alt="Мобильная версия платформы"
           className="absolute left-[80.394px] top-[55.883px] h-[588.283px] w-[272.571px] max-w-none rounded-[37.258px] object-cover"
@@ -41,7 +42,7 @@ export function PhoneSection() {
         {PHONE.chipDesktop}
       </Chip>
 
-      <p className="absolute left-[554px] top-[247px] w-[671px] -translate-y-full text-[16px] font-normal leading-[1.3] text-white">
+      <p className="absolute left-[554px] top-[247px] w-[671px] -translate-y-full text-[16px] font-medium leading-[1.3] text-white">
         {PHONE.lead}
       </p>
 
@@ -54,7 +55,7 @@ export function PhoneSection() {
             <p className="font-display whitespace-nowrap text-[20px] uppercase leading-[1.3] text-[#ff6332]">
               {card.title}
             </p>
-            <p className="text-[14px] font-normal leading-[1.3] text-white">{card.body}</p>
+            <p className="text-[14px] font-medium leading-[1.3] text-white">{card.body}</p>
           </div>
         ))}
       </div>
