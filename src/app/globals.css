@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f5f5f5;
+  --white: #ffffff;
+  --ink: #242424;
+  --ink-soft: #363636;
+  --muted: #8a8e96;
+  --orange: #ff6332;
+  --orange-2: #ff7e55;
+  --orange-3: #ff612f;
+  --orange-soft: rgba(255, 127, 55, 0.3);
+  --peach: #ffdfd5;
+  --red: #e42525;
+  --dark: #14161a;
+  --dark-card: #1f2126;
+  --hairline: #ebebeb;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-orange: var(--orange);
+  --color-orange-soft: var(--orange-soft);
+  --color-red: var(--red);
+  --color-dark: var(--dark);
+  --color-dark-card: var(--dark-card);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-display);
+  --font-logo: var(--font-geist);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  overflow-x: clip;
+}
+
+/* Figma display face is "Murs Gothic Wide Dark"; Unbounded is the closest
+   web-available substitute, tightened slightly to keep the same set widths. */
+.font-display {
+  font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+}
+
+.font-logo {
+  font-family: var(--font-geist), system-ui, sans-serif;
+}
+
+/* ---- gradients & shadows lifted verbatim from the Figma nodes ---- */
+.grad-orange {
+  background-image: linear-gradient(81.65deg, #ff7e55 1.02%, #ff612f 92.9%);
+}
+.shadow-cta {
+  box-shadow: 0 4px 5.1px 0 rgba(197, 197, 197, 0.38);
+}
+.shadow-cta-dark {
+  box-shadow: 0 4px 5.1px 0 rgba(0, 0, 0, 0.38);
+}
+.shadow-card {
+  box-shadow: 0 20px 25px -10px rgba(155, 158, 164, 0.2);
+}
+.shadow-hero-card {
+  box-shadow: 0 22px 11.9px -10px rgba(166, 166, 166, 0.26);
+}
+.grad-hero-d {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 100%),
+    linear-gradient(124.48deg, #f4f4f4 0%, #c4c4c4 100%);
+}
+.grad-hero-m {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 100%),
+    linear-gradient(101.31deg, #f4f4f4 0%, #e4e4e4 100%);
+}
+.logo-fitness {
+  background-image: radial-gradient(
+    circle at 90% 65%,
+    #ff6732 0%,
+    #fe9959 50%,
+    #fdca7f 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* FAQ open/closed is expressed through data attributes so the static Tilda
+   export can drive it without React. */
+[data-kin-faq-item][data-kin-open="false"] > [data-kin-faq-answer] {
+  display: none;
+}
+[data-kin-faq-item][data-kin-open="true"] [data-kin-faq-chevron] {
+  transform: rotate(180deg);
+}
+
+/* Wave decoration: the Figma node is a -23.07deg rotated vector sheet. */
+.wave {
+  position: absolute;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transform: rotate(-23.07deg);
+}
