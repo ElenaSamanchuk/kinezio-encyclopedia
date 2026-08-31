@@ -732,14 +732,15 @@ function init(wrap){
     }
   }
 
-  /* FAQ: one open item per column. CSS animates via grid-template-rows. */
+  /* FAQ: one open item per block — the desktop columns share a group, so
+     opening on the right closes the left. CSS animates grid-template-rows. */
   wrap.addEventListener('click',function(e){
     var button=e.target.closest&&e.target.closest('[data-kin-faq-item] button');
     if(!button)return;
     var item=button.closest('[data-kin-faq-item]');
     var open=item.getAttribute('data-kin-open')!=='true';
-    [].forEach.call(item.parentNode.children,function(sibling){
-      if(!sibling.hasAttribute('data-kin-faq-item'))return;
+    var group=button.closest('[data-kin-faq-group]')||item.parentNode;
+    [].forEach.call(group.querySelectorAll('[data-kin-faq-item]'),function(sibling){
       sibling.setAttribute('data-kin-open','false');
       var b=sibling.querySelector('button');
       if(b)b.setAttribute('aria-expanded','false');
@@ -933,6 +934,10 @@ ${scriptTag}
     mobile: mobile.includes('data-kin-canvas="430"') && !mobile.includes('data-kin-canvas="1440"'),
     kinRoot: desktopTag.includes("kin-root") && mobileTag.includes("kin-root"),
     faq: desktop.includes("data-kin-faq-item") && mobile.includes("data-kin-faq-item"),
+    faqSingleOpen:
+      desktop.includes("data-kin-faq-group") &&
+      finalJs.includes("data-kin-faq-group") &&
+      (desktop.match(/data-kin-open="true"/g) || []).length === 1,
     countdown: desktop.includes("data-kin-countdown") && mobile.includes("data-kin-countdown"),
     countdownMsk: pasteHtml.includes(String(SALE_END_MS)),
     deferredBoot:
@@ -977,8 +982,9 @@ ${scriptTag}
       pasteHtml.includes("figma/angles.mp4"),
     stickyCta:
       mobile.includes("data-kin-sticky-cta") &&
-      !desktop.includes("data-kin-sticky-cta") &&
+      desktop.includes("data-kin-sticky-cta") &&
       mobile.includes("data-kin-cta-stop") &&
+      desktop.includes("data-kin-cta-stop") &&
       finalJs.includes("data-kin-sticky-cta"),
     gapScale:
       finalCss.includes("kin-gap") &&

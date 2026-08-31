@@ -33,23 +33,11 @@ export function Theory() {
         <div className="flex min-w-0 flex-col items-start justify-between gap-[20px]">
           <div className={`${CARD} w-full gap-[28px]`}>
             <p className={CARD_TITLE}>{THEORY.breathing.title}</p>
-            <p className={CARD_BODY}>
-              {THEORY.breathing.bodyLines[0]}
-              <br />
-              {THEORY.breathing.bodyLines[1]}
-              <br />
-              {THEORY.breathing.bodyLines[2]}
-            </p>
+            <p className={CARD_BODY}>{THEORY.breathing.body}</p>
           </div>
           <div className={`${CARD} w-full gap-[28px]`}>
             <p className={CARD_TITLE}>{THEORY.anatomy.title}</p>
-            <p className={CARD_BODY}>
-              {THEORY.anatomy.bodyLines[0]}
-              <br />
-              {THEORY.anatomy.bodyLines[1]}
-              <br />
-              {THEORY.anatomy.bodyLines[2]}
-            </p>
+            <p className={CARD_BODY}>{THEORY.anatomy.body}</p>
           </div>
         </div>
 

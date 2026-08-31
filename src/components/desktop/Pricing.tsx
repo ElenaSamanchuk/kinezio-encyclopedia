@@ -4,7 +4,7 @@ import { Chip } from "@/components/ui/Chip";
 
 export function Pricing() {
   return (
-    <section data-kin-reveal id="pricing" className="kin-col kin-gap flex flex-col items-start gap-[36px]">
+    <section data-kin-cta-stop data-kin-reveal id="pricing" className="kin-col kin-gap flex flex-col items-start gap-[36px]">
       <h2 className="kin-h-trim-display font-display w-full text-[30px] uppercase leading-[1.5] text-[#242424]">
         {PRICING.title}
       </h2>
