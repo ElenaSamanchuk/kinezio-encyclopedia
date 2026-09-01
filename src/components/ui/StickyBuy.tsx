@@ -2,17 +2,23 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BuyButton } from "@/components/ui/BuyButton";
-import { STICKY_CTA } from "@/lib/content";
+import { Countdown } from "@/components/ui/Countdown";
+import { PRICE, STICKY_CTA } from "@/lib/content";
 
 /**
- * CTA that follows the page on both artboards. It hides while a section that
- * already shows its own «Купить» is on screen (hero, тарифы, финальный блок),
- * so the two never stack. Lives outside <Canvas> — the canvas `zoom` would
- * otherwise become the containing block and the bar would scroll away with the
- * page. The hidden artboard's stops never intersect, so each artboard's bar
- * answers only to the sections the visitor can actually see.
+ * CTA that follows the page. It hides while a section that already shows its
+ * own «Купить» is on screen (hero, тарифы, финальный блок), so the two never
+ * stack. Lives outside <Canvas> — the canvas `zoom` would otherwise become the
+ * containing block and the bar would scroll away with the page.
  */
-export function StickyBuy({ className = "" }: { className?: string }) {
+export function StickyBuy({
+  className = "",
+  full = false,
+}: {
+  className?: string;
+  /** Full-bleed bar with the note and the countdown above the label. */
+  full?: boolean;
+}) {
   const [show, setShow] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -38,10 +44,63 @@ export function StickyBuy({ className = "" }: { className?: string }) {
     return () => io.disconnect();
   }, []);
 
+  /*
+   * A full-bleed bar sits under whatever chat widget the page carries, and the
+   * widget is a third party we cannot select by name. Instead: anything fixed
+   * in the bottom-right corner that is not ours gets lifted by the bar height
+   * while the bar is up, and put back when it hides.
+   */
+  useEffect(() => {
+    const bar = ref.current;
+    if (!full || !bar) return;
+    const lift = show ? Math.round(bar.getBoundingClientRect().height) : 0;
+    const moved: HTMLElement[] = [];
+    Array.from(document.body.children).forEach((node) => {
+      const el = node as HTMLElement;
+      if (el === bar || el.contains(bar)) return;
+      const cs = getComputedStyle(el);
+      if (cs.position !== "fixed") return;
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      if (window.innerHeight - r.bottom > 140) return;
+      if (window.innerWidth - r.right > 140) return;
+      el.style.transition = "transform 0.25s ease";
+      el.style.transform = lift ? `translateY(-${lift}px)` : "";
+      moved.push(el);
+    });
+    return () => moved.forEach((el) => (el.style.transform = ""));
+  }, [show, full]);
+
+  // Одна и та же подача на обоих артбордах: срочность сверху, цена снизу.
+  // На мобилке полоса во всю ширину, на десктопе — пилюля слева внизу, чтобы
+  // не тесниться с виджетом чата в правом углу.
+  const label = (
+    <>
+      <span className="flex items-center gap-[6px] text-[11px] font-medium leading-[13px] text-white/85">
+        {STICKY_CTA.note}
+        <Countdown variant="inline" className="font-semibold text-white" />
+      </span>
+      <span className="text-[16px] font-bold leading-[19px] tracking-[-0.48px]">
+        {STICKY_CTA.label} {PRICE.now}
+      </span>
+    </>
+  );
+
   return (
-    <div ref={ref} data-kin-sticky-cta data-kin-show={show} className="fixed bottom-0 left-0 z-50 flex pl-[16px]">
-      <BuyButton className={`font-bold ${className}`}>
-        {STICKY_CTA}
+    <div
+      ref={ref}
+      data-kin-sticky-cta
+      data-kin-show={show}
+      className={
+        full
+          ? "fixed inset-x-0 bottom-0 z-50 flex px-[12px]"
+          : "fixed bottom-0 left-0 z-50 flex pl-[24px]"
+      }
+    >
+      <BuyButton
+        className={`flex-col gap-[2px] py-[10px] ${full ? "w-full px-[16px]" : "px-[28px]"} ${className}`}
+      >
+        {label}
       </BuyButton>
     </div>
   );

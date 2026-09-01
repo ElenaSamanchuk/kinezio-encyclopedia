@@ -18,7 +18,14 @@ function remaining(to: Date) {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export function Countdown({ className = "" }: { className?: string }) {
+export function Countdown({
+  className = "",
+  variant = "boxes",
+}: {
+  className?: string;
+  /** `inline` — одна строка «02д 16:05:29» для узких мест вроде плавающей кнопки. */
+  variant?: "boxes" | "inline";
+}) {
   // Render zeros on the server so the markup matches the design's static state,
   // then start ticking once mounted.
   const [parts, setParts] = useState<number[] | null>(null);
@@ -28,6 +35,32 @@ export function Countdown({ className = "" }: { className?: string }) {
     const id = setInterval(() => setParts(remaining(SALE_END)), 1000);
     return () => clearInterval(id);
   }, []);
+
+  if (variant === "inline") {
+    // Часы:минуты:секунды без суток — но часы считаются от полного остатка,
+    // иначе «2 дня 07:23» превратилось бы во вводящее в заблуждение «07:23».
+    // Флаг читает и рантайм Тильды: он заполняет слоты по индексу.
+    const total = parts ? parts[0] * 24 + parts[1] : 0;
+    return (
+      <span
+        data-kin-countdown={SALE_END_MS}
+        data-kin-countdown-total-hours
+        className={`whitespace-nowrap tabular-nums ${className}`}
+      >
+        <span suppressHydrationWarning data-kin-countdown-value={1}>
+          {parts ? pad(total) : "00"}
+        </span>
+        :
+        <span suppressHydrationWarning data-kin-countdown-value={2}>
+          {parts ? pad(parts[2]) : "00"}
+        </span>
+        :
+        <span suppressHydrationWarning data-kin-countdown-value={3}>
+          {parts ? pad(parts[3]) : "00"}
+        </span>
+      </span>
+    );
+  }
 
   return (
     <div

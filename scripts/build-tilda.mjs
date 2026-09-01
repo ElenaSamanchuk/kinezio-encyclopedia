@@ -756,7 +756,11 @@ function init(wrap){
     var tick=function(){
       timers.forEach(function(timer){
         var left=Math.max(0,Math.floor((+timer.getAttribute('data-kin-countdown')-Date.now())/1000));
-        var parts=[Math.floor(left/86400),Math.floor(left%86400/3600),Math.floor(left%3600/60),left%60];
+        /* Компактный таймер в плавающей кнопке показывает часы от полного
+           остатка, без отдельных суток. */
+        var parts=timer.hasAttribute('data-kin-countdown-total-hours')
+          ?[0,Math.floor(left/3600),Math.floor(left%3600/60),left%60]
+          :[Math.floor(left/86400),Math.floor(left%86400/3600),Math.floor(left%3600/60),left%60];
         parts.forEach(function(value,i){
           var slot=timer.querySelector('[data-kin-countdown-value="'+i+'"]');
           if(slot)slot.textContent=pad(value);
@@ -792,6 +796,42 @@ function init(wrap){
       sticky.setAttribute('data-kin-show',shown.length?'false':'true');
     },{rootMargin:'-15% 0px -15% 0px'});
     stops.forEach(function(el){sio.observe(el);});
+  }
+
+  /*
+   * Полноширинная полоса перекрывает виджет чата, а он — чужой и по имени
+   * не выбирается. Поднимаем всё, что зафиксировано в правом нижнем углу и
+   * не принадлежит нам, на высоту полосы, пока она видна.
+   */
+  if(sticky&&sticky.className.indexOf('inset-x-0')>=0){
+    var lifted=[];
+    var nudge=function(){
+      var up=sticky.getAttribute('data-kin-show')==='true'
+        ? Math.round(sticky.getBoundingClientRect().height) : 0;
+      lifted.forEach(function(el){el.style.transform='';});
+      lifted=[];
+      [].forEach.call(document.body.children,function(el){
+        if(el===sticky||el.contains(sticky))return;
+        var cs=window.getComputedStyle(el);
+        if(cs.position!=='fixed')return;
+        var r=el.getBoundingClientRect();
+        if(!r.width||!r.height)return;
+        if(window.innerHeight-r.bottom>140)return;
+        if(window.innerWidth-r.right>140)return;
+        el.style.transition='transform .25s ease';
+        if(up)el.style.transform='translateY(-'+up+'px)';
+        lifted.push(el);
+      });
+    };
+    if(window.MutationObserver){
+      new MutationObserver(function(m){
+        for(var i=0;i<m.length;i++){
+          if(m[i].type==='attributes'){nudge();return;}
+        }
+      }).observe(sticky,{attributes:true,attributeFilter:['data-kin-show']});
+    }
+    setTimeout(nudge,1200);
+    window.addEventListener('resize',nudge);
   }
 
   /* Scroll reveal: fade/slide sections in once. */
@@ -980,6 +1020,9 @@ ${scriptTag}
       mobile.includes("data-kin-video") &&
       finalJs.includes("data-kin-video-play") &&
       pasteHtml.includes("figma/angles.mp4"),
+    stickyCtaFull:
+      /data-kin-sticky-cta[^>]*inset-x-0/.test(mobile) &&
+      /data-kin-sticky-cta[\s\S]{0,900}data-kin-countdown/.test(mobile),
     stickyCta:
       mobile.includes("data-kin-sticky-cta") &&
       desktop.includes("data-kin-sticky-cta") &&

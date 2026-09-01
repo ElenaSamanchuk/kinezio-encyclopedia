@@ -33,7 +33,7 @@ export function DesktopPage() {
         <FinalCta />
       </div>
       </Canvas>
-      <StickyBuy className="px-[32px] py-[16px] text-[16px] leading-[19px] tracking-[-0.48px]" />
+      <StickyBuy />
     </>
   );
 }
