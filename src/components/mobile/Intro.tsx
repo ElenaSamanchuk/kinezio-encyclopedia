@@ -6,7 +6,7 @@ import { Wave } from "@/components/ui/Wave";
 
 export function Intro() {
   return (
-    <section data-kin-reveal className="relative h-[563px] w-[430px] overflow-hidden bg-white">
+    <section data-kin-reveal className="relative h-[571px] w-[430px] overflow-hidden bg-white">
       <Wave src={A.waveLight} inset={[-51.35, -147.89, -59.24, -115.81]} parent={[430, 555]} />
 
       <p className="absolute left-[12px] top-[40px] w-[235px] text-[14px] font-semibold leading-[normal] text-[#242424]">

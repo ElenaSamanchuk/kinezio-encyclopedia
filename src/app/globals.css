@@ -248,7 +248,7 @@ body {
 
 /*
  * Vertical rhythm between blocks. One step per artboard — desktop 96 / mobile
- * 48 — so the scale lives here instead of a per-section `mt-[…]`. The step
+ * 56 — so the scale lives here instead of a per-section `mt-[…]`. The step
  * equals the bottom padding the backgrounded sections already carry from the
  * design, so a white block followed by a gap reads as one even rhythm instead
  * of two different spaces stacked. The page tail matches the step.
@@ -260,10 +260,10 @@ body {
   padding-bottom: 96px;
 }
 [data-kin-canvas="430"] .kin-gap {
-  margin-top: 48px;
+  margin-top: 56px;
 }
 [data-kin-canvas="430"] .kin-tail {
-  padding-bottom: 48px;
+  padding-bottom: 56px;
 }
 
 /*
