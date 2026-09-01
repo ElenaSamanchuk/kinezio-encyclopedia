@@ -1018,7 +1018,7 @@ ${scriptTag}
       pasteHtml.includes("figma/angles.mp4"),
     stickyCtaFull:
       /data-kin-sticky-cta[^>]*inset-x-0/.test(mobile) &&
-      /data-kin-sticky-cta[\s\S]{0,900}data-kin-countdown/.test(mobile),
+      /data-kin-sticky-cta[\s\S]{0,900}Скидка до 3 сентября/.test(mobile),
     stickyCta:
       mobile.includes("data-kin-sticky-cta") &&
       desktop.includes("data-kin-sticky-cta") &&
