@@ -9,21 +9,25 @@ export function Certificate() {
         {CERTIFICATE.title}
       </h2>
 
-      <Step left={12} width={50} icon={A.iconModules} label="Модули" />
-      <Step left={173} width={84} icon={A.iconTeacher} label="Тестирование" />
-      <Step left={345} width={73} icon={A.iconCertificate} label="Сертификат" orange />
-      <Img
-        src={A.lineArrow}
-        alt=""
-        aria-hidden
-        className="absolute left-[98px] top-[157.23px] h-[11.55px] w-[40px] max-w-none"
-      />
-      <Img
-        src={A.lineArrow}
-        alt=""
-        aria-hidden
-        className="absolute left-[276px] top-[157.23px] h-[11.55px] w-[40px] max-w-none"
-      />
+      {/* Plain wrapper — it is not positioned, so the steps still resolve
+          against the section. DOM order is the cascade order. */}
+      <div data-kin-stagger>
+        <Step left={12} width={50} icon={A.iconModules} label="Модули" />
+        <Img
+          src={A.lineArrow}
+          alt=""
+          aria-hidden
+          className="absolute left-[98px] top-[157.23px] h-[11.55px] w-[40px] max-w-none"
+        />
+        <Step left={173} width={84} icon={A.iconTeacher} label="Тестирование" />
+        <Img
+          src={A.lineArrow}
+          alt=""
+          aria-hidden
+          className="absolute left-[276px] top-[157.23px] h-[11.55px] w-[40px] max-w-none"
+        />
+        <Step left={345} width={73} icon={A.iconCertificate} label="Сертификат" orange />
+      </div>
 
       <p className="absolute left-[12px] top-[280px] w-[406px] -translate-y-full text-[14px] font-semibold leading-[1.3] text-[#ff6332]">
         {CERTIFICATE.accent}

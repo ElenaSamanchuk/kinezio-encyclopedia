@@ -43,12 +43,8 @@ function Foot({
   href?: string;
   cta?: string;
 }) {
-  // «Написать в поддержку» is three times the width of «Купить» and does not fit
-  // beside the price block, so the club card stacks its footer instead.
   return (
-    <div
-      className={`flex w-full ${cta ? "flex-col items-start gap-[24px]" : "items-end justify-between"}`}
-    >
+    <div className="flex w-full items-end justify-between gap-[16px]">
       <div className="flex flex-col items-start gap-[16px]">
         <p className="font-display whitespace-nowrap text-[30px] uppercase leading-[1.2] text-[#e42525]">
           {price}
@@ -65,7 +61,9 @@ function Foot({
       <BuyButton
         plan={plan}
         href={href}
-        className={`shrink-0 py-[20px] text-[16px] font-bold tracking-[-0.48px] ${cta ? "px-[40px]" : "px-[60px]"}`}
+        className={`h-[59px] shrink-0 font-bold ${
+          cta ? "px-[16px] text-[14px] tracking-[-0.42px]" : "px-[60px] text-[16px] tracking-[-0.48px]"
+        }`}
       >
         {cta}
       </BuyButton>

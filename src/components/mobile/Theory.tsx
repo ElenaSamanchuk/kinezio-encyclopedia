@@ -23,9 +23,7 @@ export function Theory() {
         <div className={CARD}>
           <p className={CARD_TITLE}>{THEORY.clear.title}</p>
           <p className={CARD_BODY}>
-            {THEORY.clear.bodyMobile[0]}
-            <br />
-            {THEORY.clear.bodyMobile[1]}
+            {THEORY.clear.bodyMobile}
           </p>
         </div>
 

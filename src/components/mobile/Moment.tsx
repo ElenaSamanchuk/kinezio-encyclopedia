@@ -4,7 +4,7 @@ import { Wave } from "@/components/ui/Wave";
 
 export function Moment() {
   return (
-    <section data-kin-reveal className="relative kin-gap h-[547px] w-[430px] overflow-hidden">
+    <section data-kin-reveal className="relative kin-gap h-[532px] w-[430px] overflow-hidden">
       <div className="absolute left-[-80px] top-[-34px] h-[620px] w-[1566px] border border-solid border-[rgba(255,255,255,0.2)] bg-[#14161a]" />
       <Wave src={A.waveDark} inset={[-27.31, -118.49, -29.41, -40.47]} parent={[430, 531]} />
 
@@ -27,12 +27,7 @@ export function Moment() {
               {item.n}
             </span>
             <p className="min-w-px flex-1 text-[14px] font-semibold leading-[1.3] text-white">
-              {item.lines.map((line, i) => (
-                <span key={line}>
-                  {i > 0 && <br />}
-                  {line}
-                </span>
-              ))}
+              {item.text}
             </p>
           </div>
         ))}

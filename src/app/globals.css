@@ -247,23 +247,23 @@ body {
 }
 
 /*
- * Vertical rhythm between blocks. One step per artboard — desktop 80 / mobile
- * 40 — so the scale lives here instead of a per-section `mt-[…]`. The step
+ * Vertical rhythm between blocks. One step per artboard — desktop 96 / mobile
+ * 48 — so the scale lives here instead of a per-section `mt-[…]`. The step
  * equals the bottom padding the backgrounded sections already carry from the
  * design, so a white block followed by a gap reads as one even rhythm instead
  * of two different spaces stacked. The page tail matches the step.
  */
 [data-kin-canvas="1440"] .kin-gap {
-  margin-top: 80px;
+  margin-top: 96px;
 }
 [data-kin-canvas="1440"] .kin-tail {
-  padding-bottom: 80px;
+  padding-bottom: 96px;
 }
 [data-kin-canvas="430"] .kin-gap {
-  margin-top: 40px;
+  margin-top: 48px;
 }
 [data-kin-canvas="430"] .kin-tail {
-  padding-bottom: 40px;
+  padding-bottom: 48px;
 }
 
 /*
@@ -281,4 +281,55 @@ body {
 /* The display face sits tighter in its line box than Manrope does. */
 .kin-h-trim-display {
   margin-top: -0.296em;
+}
+
+/*
+ * Каскад: дети помеченного контейнера приходят по очереди, а не все разом.
+ * Ступени в блоке сертификата и мокап телефона появляются заметнее, чем
+ * секция целиком, — поэтому у них своя, более длинная дистанция.
+ */
+[data-kin-stagger] > *,
+[data-kin-rise] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+[data-kin-rise] {
+  transform: translateY(40px);
+}
+[data-kin-reveal].kin-in [data-kin-stagger] > *,
+[data-kin-reveal].kin-in [data-kin-rise] {
+  opacity: 1;
+  transform: none;
+}
+[data-kin-stagger] > *:nth-child(1) {
+  transition-delay: 0.08s;
+}
+[data-kin-stagger] > *:nth-child(2) {
+  transition-delay: 0.18s;
+}
+[data-kin-stagger] > *:nth-child(3) {
+  transition-delay: 0.28s;
+}
+[data-kin-stagger] > *:nth-child(4) {
+  transition-delay: 0.38s;
+}
+[data-kin-stagger] > *:nth-child(5) {
+  transition-delay: 0.48s;
+}
+[data-kin-stagger] > *:nth-child(n + 6) {
+  transition-delay: 0.58s;
+}
+[data-kin-rise] {
+  transition-delay: 0.12s;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-kin-stagger] > *,
+  [data-kin-rise] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

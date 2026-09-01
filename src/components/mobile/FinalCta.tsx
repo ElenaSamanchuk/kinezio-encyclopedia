@@ -28,7 +28,7 @@ export function FinalCta() {
 
       <BuyButton
         dark
-        className="absolute left-[calc(50%+0.5px)] top-[279px] -translate-x-1/2 px-[40px] py-[20px] text-[14px] font-bold uppercase tracking-[-0.42px]"
+        className="absolute left-[calc(50%+0.5px)] top-[279px] -translate-x-1/2 h-[51px] px-[40px] text-[14px] font-bold uppercase tracking-[-0.42px]"
       />
     </section>
   );

@@ -14,7 +14,7 @@ export function PhoneSection() {
       />
 
       {/* phone mock-up */}
-      <div className="absolute left-[100.357px] top-0 h-[685.35px] w-[419.642px]">
+      <div data-kin-rise className="absolute left-[100.357px] top-0 h-[685.35px] w-[419.642px]">
         <div className="absolute inset-0 overflow-hidden">
           <Img
             src={A.phoneFrame}

@@ -17,10 +17,11 @@
  * original actually carries more pixels than any screen can show.
  *
  * WebP is lossy by default. Alpha ramps (phone frame, trainer cut-out, glow,
- * CSS masks) are gated on maxAlpha so a halo cannot slip through; RGB error
- * is allowed a little more room than the old PNG-palette pass because WebP's
- * transform is coarser. If no lossy candidate clears the gate we fall back to
- * lossless WebP.
+ * CSS masks) are gated on maxAlpha so a halo cannot slip through. meanRgb is
+ * the photographic gate: at the old 6 the picker took the cheapest candidate
+ * that cleared it, and theory-b landed at 20.6 dB PSNR — visibly mushy on the
+ * faces. 1.6 keeps every photo above ~35 dB for a few tens of KB. If no lossy
+ * candidate clears the gate we fall back to lossless WebP.
  *
  * Four files are JPEGs that were saved with a .png extension. They convert to
  * WebP the same way as everything else.
@@ -77,9 +78,9 @@ const MIN_RESIZE_GAIN = 0.05;
  * maxRgb is not gated — WebP routinely hits 255 on a single anti-aliased
  * edge pixel even when meanRgb is ~2. meanRgb is the perceptual driver.
  */
-const FIDELITY = { maxAlpha: 16, meanRgb: 6 };
+const FIDELITY = { maxAlpha: 16, meanRgb: 1.6 };
 
-const WEBP_QUALITIES = [75, 82, 90];
+const WEBP_QUALITIES = [82, 90, 95, 98];
 
 const ALPHA_ONLY_MASKS = new Set([
   "mask-photo1-d.png",
@@ -214,6 +215,20 @@ async function processRaster(name) {
 
   const viable = candidates.filter((c) => c.ok).sort((a, b) => a.buf.length - b.buf.length);
   let best = viable[0];
+
+  /*
+   * Полупрозрачный край сам по себе поднимает среднюю ошибку: WebP пишет цвет
+   * и под нулевой альфой. У phone-frame даже q98 даёт 1.71 — порог не берёт
+   * никто, и остаётся lossless на 494 КБ. Если верхнее лоссу-качество заметно
+   * легче, берём его: на глаз неотличимо, вес втрое меньше.
+   */
+  if (best && best.label.startsWith("lossless")) {
+    const topQ = WEBP_QUALITIES[WEBP_QUALITIES.length - 1];
+    const lossy = candidates
+      .filter((c) => c.label.startsWith(`q${topQ}`))
+      .sort((a, b) => a.buf.length - b.buf.length)[0];
+    if (lossy && lossy.buf.length < best.buf.length * 0.75) best = lossy;
+  }
   const rejected = candidates
     .filter((c) => !c.ok)
     .map((c) => `${c.label} (rgb ${c.m.meanRgb.toFixed(2)}/${c.m.maxRgb}, a ${c.m.maxAlpha})`);

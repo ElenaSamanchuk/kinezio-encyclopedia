@@ -28,12 +28,7 @@ export function Moment() {
               {item.n}
             </span>
             <p className="min-w-px flex-1 text-[16px] font-semibold leading-[1.3] text-white">
-              {item.lines.map((line, i) => (
-                <span key={line}>
-                  {i > 0 && <br />}
-                  {line}
-                </span>
-              ))}
+              {item.text}
             </p>
           </div>
         ))}

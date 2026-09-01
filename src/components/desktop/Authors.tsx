@@ -43,9 +43,9 @@ export function Authors() {
       <AuthorCard
         left={420}
         name={AUTHORS.alexey.name}
-        roleLines={AUTHORS.alexey.roleLines}
+        role={AUTHORS.alexey.role}
       />
-      <AuthorCard left={760} name={AUTHORS.yuri.name} roleLines={AUTHORS.yuri.roleLines} />
+      <AuthorCard left={760} name={AUTHORS.yuri.name} role={AUTHORS.yuri.role} />
     </section>
   );
 }
@@ -53,11 +53,11 @@ export function Authors() {
 function AuthorCard({
   left,
   name,
-  roleLines,
+  role,
 }: {
   left: number;
   name: string;
-  roleLines: readonly string[];
+  role: string;
 }) {
   return (
     <>
@@ -77,12 +77,7 @@ function AuthorCard({
       >
         <p className="font-bold leading-[1.3]">{name}</p>
         <p className="leading-[1.3]">
-          {roleLines.map((line, i) => (
-            <span key={line}>
-              {i > 0 && <br />}
-              {line}
-            </span>
-          ))}
+          {role}
         </p>
       </div>
     </>

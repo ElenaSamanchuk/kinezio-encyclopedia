@@ -27,7 +27,7 @@ export function Authors() {
         left={158}
         top={422}
         name={AUTHORS.alexey.name}
-        roleLines={AUTHORS.alexey.roleLinesMobile}
+        role={AUTHORS.alexey.role}
       />
 
       <div className="absolute left-[158px] top-[552px] h-[267px] w-[260px] overflow-hidden">
@@ -44,7 +44,7 @@ export function Authors() {
         left={12}
         top={729}
         name={AUTHORS.yuri.name}
-        roleLines={AUTHORS.yuri.roleLinesMobile}
+        role={AUTHORS.yuri.role}
       />
     </section>
   );
@@ -54,12 +54,12 @@ function AuthorCard({
   left,
   top,
   name,
-  roleLines,
+  role,
 }: {
   left: number;
   top: number;
   name: string;
-  roleLines: readonly string[];
+  role: string;
 }) {
   return (
     <>
@@ -79,12 +79,7 @@ function AuthorCard({
       >
         <p className="font-bold leading-[1.3]">{name}</p>
         <p className="leading-[1.3]">
-          {roleLines.map((line, i) => (
-            <span key={line}>
-              {i > 0 && <br />}
-              {line}
-            </span>
-          ))}
+          {role}
         </p>
       </div>
     </>

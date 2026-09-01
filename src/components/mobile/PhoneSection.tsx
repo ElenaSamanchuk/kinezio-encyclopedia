@@ -42,7 +42,7 @@ export function PhoneSection() {
         ))}
       </div>
 
-      <div className="absolute left-[30.15px] top-[387px] h-[564px] w-[345.339px]">
+      <div data-kin-rise className="absolute left-[30.15px] top-[387px] h-[564px] w-[345.339px]">
         <div className="absolute inset-0 overflow-hidden">
           <Img
             src={A.phoneFrame}

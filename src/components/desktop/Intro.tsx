@@ -6,7 +6,7 @@ import { Wave } from "@/components/ui/Wave";
 
 export function Intro() {
   return (
-    <section data-kin-reveal className="kin-bleed kin-bleed-white relative h-[401px] w-full bg-white">
+    <section data-kin-reveal className="kin-bleed kin-bleed-white relative h-[417px] w-full bg-white">
       <div className="absolute inset-0 overflow-hidden">
       <Wave src={A.waveLight} inset={[-80.3, 30.77, -111.17, -39.38]} parent={[1440, 401]} />
 
@@ -23,11 +23,7 @@ export function Intro() {
           {INTRO.leftTitle}
         </p>
         <p className="absolute left-[24px] top-[89px] w-[356px] text-[14px] font-semibold leading-[1.3] text-[#8a8e96]">
-          {INTRO.leftBody[0]}
-          <br />
-          {INTRO.leftBody[1]}
-          <br />
-          {INTRO.leftBody[2]}
+          {INTRO.leftBody}
         </p>
         <MaskedPhoto
           mask={A.maskPhoto1D}
@@ -64,9 +60,7 @@ export function Intro() {
         </p>
         <div className="absolute left-[24px] top-[62px] w-[356px] text-[14px] font-semibold text-white">
           <p className="leading-[1.3]">
-            {INTRO.rightBody1a}
-            <br />
-            {INTRO.rightBody1b}
+            {INTRO.rightBody1}
           </p>
           <p className="leading-[1.3]">&#8203;</p>
           <p className="leading-[1.3]">{INTRO.rightBody2}</p>

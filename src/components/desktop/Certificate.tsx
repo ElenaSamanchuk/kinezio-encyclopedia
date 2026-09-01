@@ -12,28 +12,27 @@ export function Certificate() {
         {CERTIFICATE.title}
       </h2>
 
-      <div className="absolute left-[120px] top-[141px] h-[74px] w-[328px]">
+      {/* DOM order is the cascade order: step, arrow, step, arrow, step. */}
+      <div data-kin-stagger className="absolute left-[120px] top-[141px] h-[74px] w-[328px]">
         <Step left={0} width={50} icon={STEP_ICON[0]} label="Модули" />
-        <Step left={116} width={84} icon={STEP_ICON[1]} label="Тестирование" />
-        <Step left={255} width={73} icon={STEP_ICON[2]} label="Сертификат" orange />
         <Img
           src={A.lineArrow}
           alt=""
           aria-hidden
           className="absolute left-[71px] top-[19.23px] h-[11.55px] w-[40px] max-w-none"
         />
+        <Step left={116} width={84} icon={STEP_ICON[1]} label="Тестирование" />
         <Img
           src={A.lineArrow}
           alt=""
           aria-hidden
           className="absolute left-[205px] top-[19.23px] h-[11.55px] w-[40px] max-w-none"
         />
+        <Step left={255} width={73} icon={STEP_ICON[2]} label="Сертификат" orange />
       </div>
 
       <p className="absolute left-[120px] top-[297px] w-[560px] -translate-y-full text-[16px] font-semibold leading-[1.3] text-[#ff6332]">
-        {CERTIFICATE.accentLines[0]}
-        <br />
-        {CERTIFICATE.accentLines[1]}
+        {CERTIFICATE.accent}
       </p>
       <p className="absolute left-[120px] top-[359px] w-[546px] -translate-y-full text-[16px] font-medium leading-[1.3] text-[#242424]">
         {CERTIFICATE.body}

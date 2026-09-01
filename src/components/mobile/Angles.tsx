@@ -29,9 +29,7 @@ export function Angles() {
           {ANGLES.left}
         </p>
         <p className="absolute left-[196px] top-[218px] w-[199px] text-[14px] font-medium leading-[1.3] text-[#242424]">
-          {ANGLES.rightMobileLines[0]}
-          <br />
-          {ANGLES.rightMobileLines[1]}
+          {ANGLES.right}
         </p>
       </div>
 

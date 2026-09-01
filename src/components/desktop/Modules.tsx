@@ -25,13 +25,7 @@ export function Modules() {
           <Head
             label={m3.label}
             title={m3.title}
-            lead={
-              <>
-                {m3.leadLines[0]}
-                <br />
-                {m3.leadLines[1]}
-              </>
-            }
+            lead={m3.lead}
           />
           <Body>{m3.body}</Body>
         </article>
