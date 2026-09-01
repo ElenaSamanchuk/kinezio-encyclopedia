@@ -795,25 +795,30 @@ function init(wrap){
   }
 
   /*
-   * Полноширинная полоса перекрывает виджет чата, а он — чужой и по имени
-   * не выбирается. Поднимаем всё, что зафиксировано в правом нижнем углу и
-   * не принадлежит нам, на высоту полосы, пока она видна.
+   * Полоса перекрывает виджет чата, а он чужой и по имени не выбирается: на
+   * боевой странице это #sw-fab-stack, лежащий не прямым ребёнком body.
+   * Поэтому ищем по всему документу небольшие фиксированные боксы, прижатые
+   * к правому нижнему углу, и поднимаем их. Ограничение по ширине оставляет
+   * в покое полноширинные фиксированные панели Тильды, повторные проходы
+   * ловят виджеты, чей скрипт грузится позже нашего.
    */
-  if(sticky&&sticky.className.indexOf('inset-x-0')>=0){
+  if(sticky){
     var lifted=[];
     var nudge=function(){
       var up=sticky.getAttribute('data-kin-show')==='true'
-        ? Math.round(sticky.getBoundingClientRect().height) : 0;
+        ? Math.round(sticky.getBoundingClientRect().height)+8 : 0;
       lifted.forEach(function(el){el.style.transform='';});
       lifted=[];
-      [].forEach.call(document.body.children,function(el){
-        if(el===sticky||el.contains(sticky))return;
+      [].forEach.call(document.querySelectorAll('*'),function(el){
+        if(el===sticky||el.contains(sticky)||sticky.contains(el))return;
+        if(el.closest&&el.closest('.kin-root'))return;
         var cs=window.getComputedStyle(el);
         if(cs.position!=='fixed')return;
         var r=el.getBoundingClientRect();
-        if(!r.width||!r.height)return;
-        if(window.innerHeight-r.bottom>140)return;
-        if(window.innerWidth-r.right>140)return;
+        if(r.width<20||r.height<20)return;
+        if(r.width>window.innerWidth*0.6)return;
+        if(window.innerHeight-r.bottom>200)return;
+        if(window.innerWidth-r.right>200)return;
         el.style.transition='transform .25s ease';
         if(up)el.style.transform='translateY(-'+up+'px)';
         lifted.push(el);
@@ -826,7 +831,7 @@ function init(wrap){
         }
       }).observe(sticky,{attributes:true,attributeFilter:['data-kin-show']});
     }
-    setTimeout(nudge,1200);
+    [800,2000,5000].forEach(function(ms){setTimeout(nudge,ms);});
     window.addEventListener('resize',nudge);
   }
 
@@ -1018,7 +1023,7 @@ ${scriptTag}
       pasteHtml.includes("figma/angles.mp4"),
     stickyCtaFull:
       /data-kin-sticky-cta[^>]*inset-x-0/.test(mobile) &&
-      /data-kin-sticky-cta[\s\S]{0,900}Скидка до 3 сентября/.test(mobile),
+      /data-kin-sticky-cta[\s\S]{0,900}До 3 сентября/.test(mobile),
     stickyCta:
       mobile.includes("data-kin-sticky-cta") &&
       !desktop.includes("data-kin-sticky-cta") &&

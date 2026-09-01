@@ -40,29 +40,43 @@ export function StickyBuy({ className = "" }: { className?: string }) {
 
   /*
    * A full-bleed bar sits under whatever chat widget the page carries, and the
-   * widget is a third party we cannot select by name. Instead: anything fixed
-   * in the bottom-right corner that is not ours gets lifted by the bar height
-   * while the bar is up, and put back when it hides.
+   * widget is a third party we cannot select by name — on the live page it is
+   * `#sw-fab-stack`, nested, not a child of body. So: scan the whole document
+   * for small fixed boxes hugging the bottom-right corner and lift those. The
+   * width guard keeps Tilda's own full-width fixed panels out of it, and the
+   * rescans catch widgets whose script loads after us.
    */
   useEffect(() => {
     const bar = ref.current;
     if (!bar) return;
-    const lift = show ? Math.round(bar.getBoundingClientRect().height) : 0;
-    const moved: HTMLElement[] = [];
-    Array.from(document.body.children).forEach((node) => {
-      const el = node as HTMLElement;
-      if (el === bar || el.contains(bar)) return;
-      const cs = getComputedStyle(el);
-      if (cs.position !== "fixed") return;
-      const r = el.getBoundingClientRect();
-      if (!r.width || !r.height) return;
-      if (window.innerHeight - r.bottom > 140) return;
-      if (window.innerWidth - r.right > 140) return;
-      el.style.transition = "transform 0.25s ease";
-      el.style.transform = lift ? `translateY(-${lift}px)` : "";
-      moved.push(el);
-    });
-    return () => moved.forEach((el) => (el.style.transform = ""));
+    const moved = new Set<HTMLElement>();
+
+    const apply = () => {
+      const lift = show ? Math.round(bar.getBoundingClientRect().height) + 8 : 0;
+      document.querySelectorAll<HTMLElement>("*").forEach((el) => {
+        if (el === bar || el.contains(bar) || bar.contains(el)) return;
+        if (el.closest(".kin-root")) return;
+        const cs = getComputedStyle(el);
+        if (cs.position !== "fixed") return;
+        const r = el.getBoundingClientRect();
+        if (r.width < 20 || r.height < 20) return;
+        if (r.width > window.innerWidth * 0.6) return;
+        if (window.innerHeight - r.bottom > 200) return;
+        if (window.innerWidth - r.right > 200) return;
+        el.style.transition = "transform 0.25s ease";
+        el.style.transform = lift ? `translateY(-${lift}px)` : "";
+        moved.add(el);
+      });
+    };
+
+    apply();
+    const timers = [1000, 3000, 6000].map((ms) => window.setTimeout(apply, ms));
+    window.addEventListener("resize", apply);
+    return () => {
+      timers.forEach(clearTimeout);
+      window.removeEventListener("resize", apply);
+      moved.forEach((el) => (el.style.transform = ""));
+    };
   }, [show]);
 
   // Срок стоит внутри кнопки мелкой строкой над ценой: одна цель нажатия,
