@@ -24,14 +24,14 @@ export function Intro() {
           mask={A.maskPhoto1M}
           maskSize="184.15px 193px"
           src={A.photoTrainerA}
-          className="left-[314px] top-0 h-[245.477px] w-[184.15px]"
+          className="left-[298px] top-0 h-[245.477px] w-[184.15px]"
         />
         <MaskedPhoto
           mask={A.maskPhoto2M}
           maskSize="164.664px 170.544px"
           maskPosition="0px -0.756px"
           src={A.photoTrainerB}
-          className="left-[266px] top-[8.6px] h-[219.915px] w-[164.664px]"
+          className="left-[249.5px] top-[8.6px] h-[219.915px] w-[164.664px]"
         />
       </div>
 
