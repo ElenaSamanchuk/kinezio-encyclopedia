@@ -51,18 +51,34 @@ export function StickyBuy({ className = "" }: { className?: string }) {
     if (!bar) return;
     const moved = new Set<HTMLElement>();
 
+    /** Зазор между низом виджета и верхом полосы. */
+    const GAP = 12;
+
     const apply = () => {
-      const lift = show ? Math.round(bar.getBoundingClientRect().height) + 8 : 0;
+      // Верх полосы в покое: она прижата к низу, анимация появления не должна
+      // влиять на расчёт.
+      const barTop = window.innerHeight - bar.offsetHeight;
       document.querySelectorAll<HTMLElement>("*").forEach((el) => {
         if (el === bar || el.contains(bar) || bar.contains(el)) return;
         if (el.closest(".kin-root")) return;
         const cs = getComputedStyle(el);
         if (cs.position !== "fixed") return;
+        // Меряем без своего сдвига, иначе на повторном проходе виджет
+        // «уползал» бы дальше с каждым разом.
+        const prev = el.style.transform;
+        const prevTransition = el.style.transition;
+        el.style.transition = "none";
+        el.style.transform = "";
         const r = el.getBoundingClientRect();
+        el.style.transform = prev;
+        el.style.transition = prevTransition;
         if (r.width < 20 || r.height < 20) return;
         if (r.width > window.innerWidth * 0.6) return;
         if (window.innerHeight - r.bottom > 200) return;
         if (window.innerWidth - r.right > 200) return;
+        // Поднимаем ровно на перекрытие плюс зазор, а не на всю высоту полосы:
+        // виджет и так может стоять выше края экрана.
+        const lift = show ? Math.max(0, Math.round(r.bottom - barTop + GAP)) : 0;
         el.style.transition = "transform 0.25s ease";
         el.style.transform = lift ? `translateY(-${lift}px)` : "";
         moved.add(el);

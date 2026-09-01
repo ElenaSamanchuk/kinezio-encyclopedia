@@ -804,23 +804,32 @@ function init(wrap){
    */
   if(sticky){
     var lifted=[];
+    var GAP=12;
     var nudge=function(){
-      var up=sticky.getAttribute('data-kin-show')==='true'
-        ? Math.round(sticky.getBoundingClientRect().height)+8 : 0;
-      lifted.forEach(function(el){el.style.transform='';});
+      var shown=sticky.getAttribute('data-kin-show')==='true';
+      /* Верх полосы в покое: анимация появления не должна влиять на расчёт. */
+      var barTop=window.innerHeight-sticky.offsetHeight;
       lifted=[];
       [].forEach.call(document.querySelectorAll('*'),function(el){
         if(el===sticky||el.contains(sticky)||sticky.contains(el))return;
         if(el.closest&&el.closest('.kin-root'))return;
         var cs=window.getComputedStyle(el);
         if(cs.position!=='fixed')return;
+        /* Меряем без своего сдвига, иначе на повторном проходе виджет
+           уползал бы дальше с каждым разом. */
+        var prev=el.style.transform,prevTr=el.style.transition;
+        el.style.transition='none';el.style.transform='';
         var r=el.getBoundingClientRect();
+        el.style.transform=prev;el.style.transition=prevTr;
         if(r.width<20||r.height<20)return;
         if(r.width>window.innerWidth*0.6)return;
         if(window.innerHeight-r.bottom>200)return;
         if(window.innerWidth-r.right>200)return;
+        /* Поднимаем ровно на перекрытие плюс зазор, а не на всю высоту
+           полосы: виджет и так может стоять выше края экрана. */
+        var up=shown?Math.max(0,Math.round(r.bottom-barTop+GAP)):0;
         el.style.transition='transform .25s ease';
-        if(up)el.style.transform='translateY(-'+up+'px)';
+        el.style.transform=up?'translateY(-'+up+'px)':'';
         lifted.push(el);
       });
     };
