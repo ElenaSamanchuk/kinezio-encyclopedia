@@ -756,11 +756,7 @@ function init(wrap){
     var tick=function(){
       timers.forEach(function(timer){
         var left=Math.max(0,Math.floor((+timer.getAttribute('data-kin-countdown')-Date.now())/1000));
-        /* Компактный таймер в плавающей кнопке показывает часы от полного
-           остатка, без отдельных суток. */
-        var parts=timer.hasAttribute('data-kin-countdown-total-hours')
-          ?[0,Math.floor(left/3600),Math.floor(left%3600/60),left%60]
-          :[Math.floor(left/86400),Math.floor(left%86400/3600),Math.floor(left%3600/60),left%60];
+        var parts=[Math.floor(left/86400),Math.floor(left%86400/3600),Math.floor(left%3600/60),left%60];
         parts.forEach(function(value,i){
           var slot=timer.querySelector('[data-kin-countdown-value="'+i+'"]');
           if(slot)slot.textContent=pad(value);

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BuyButton } from "@/components/ui/BuyButton";
-import { Countdown } from "@/components/ui/Countdown";
 import { PRICE, STICKY_CTA } from "@/lib/content";
 
 /**
@@ -71,21 +70,8 @@ export function StickyBuy({
     return () => moved.forEach((el) => (el.style.transform = ""));
   }, [show, full]);
 
-  // Одна и та же подача на обоих артбордах: срочность сверху, цена снизу.
-  // На мобилке полоса во всю ширину, на десктопе — пилюля слева внизу, чтобы
-  // не тесниться с виджетом чата в правом углу.
-  const label = (
-    <>
-      <span className="flex items-center gap-[6px] text-[11px] font-medium leading-[13px] text-white/85">
-        {STICKY_CTA.note}
-        <Countdown variant="inline" className="font-semibold text-white" />
-      </span>
-      <span className="text-[16px] font-bold leading-[19px] tracking-[-0.48px]">
-        {STICKY_CTA.label} {PRICE.now}
-      </span>
-    </>
-  );
-
+  // Срок стоит внутри кнопки мелкой строкой над ценой: одна цель нажатия,
+  // ничего не выступает за её края.
   return (
     <div
       ref={ref}
@@ -98,9 +84,14 @@ export function StickyBuy({
       }
     >
       <BuyButton
-        className={`flex-col gap-[2px] py-[10px] ${full ? "w-full px-[16px]" : "px-[28px]"} ${className}`}
+        className={`flex-col gap-[2px] py-[9px] ${full ? "w-full px-[16px]" : "px-[32px]"} ${className}`}
       >
-        {label}
+        <span className="text-[10px] font-medium leading-[12px] text-white/85">
+          {STICKY_CTA.note}
+        </span>
+        <span className="text-[14px] font-bold uppercase leading-[17px] tracking-[-0.42px]">
+          {STICKY_CTA.label} {PRICE.now}
+        </span>
       </BuyButton>
     </div>
   );

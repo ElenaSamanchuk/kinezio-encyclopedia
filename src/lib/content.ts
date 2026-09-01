@@ -178,7 +178,7 @@ export const CERTIFICATE = nb({
 
 /** Плавающая кнопка на мобильной вёрстке. */
 export const STICKY_CTA = {
-  note: "Ограниченное предложение",
+  note: "Скидка до 3 сентября включительно",
   label: "Купить со скидкой за",
 } as const;
 

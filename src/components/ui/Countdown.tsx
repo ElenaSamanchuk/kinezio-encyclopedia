@@ -37,27 +37,22 @@ export function Countdown({
   }, []);
 
   if (variant === "inline") {
-    // Часы:минуты:секунды без суток — но часы считаются от полного остатка,
-    // иначе «2 дня 07:23» превратилось бы во вводящее в заблуждение «07:23».
-    // Флаг читает и рантайм Тильды: он заполняет слоты по индексу.
-    const total = parts ? parts[0] * 24 + parts[1] : 0;
+    // Дни:часы:минуты:секунды одной строкой. Атрибуты те же, что у крупного
+    // варианта, — рантайм Тильды заполняет слоты по индексу и не знает про
+    // оформление.
     return (
       <span
         data-kin-countdown={SALE_END_MS}
-        data-kin-countdown-total-hours
         className={`whitespace-nowrap tabular-nums ${className}`}
       >
-        <span suppressHydrationWarning data-kin-countdown-value={1}>
-          {parts ? pad(total) : "00"}
-        </span>
-        :
-        <span suppressHydrationWarning data-kin-countdown-value={2}>
-          {parts ? pad(parts[2]) : "00"}
-        </span>
-        :
-        <span suppressHydrationWarning data-kin-countdown-value={3}>
-          {parts ? pad(parts[3]) : "00"}
-        </span>
+        {[0, 1, 2, 3].map((i) => (
+          <span key={i}>
+            {i > 0 && ":"}
+            <span suppressHydrationWarning data-kin-countdown-value={i}>
+              {parts ? pad(parts[i]) : "00"}
+            </span>
+          </span>
+        ))}
       </span>
     );
   }
