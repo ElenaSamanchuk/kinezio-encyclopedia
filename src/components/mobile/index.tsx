@@ -34,7 +34,7 @@ export function MobilePage() {
         <FinalCta />
       </div>
       </Canvas>
-      <StickyBuy full />
+      <StickyBuy />
     </>
   );
 }

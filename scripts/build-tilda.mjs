@@ -1021,9 +1021,8 @@ ${scriptTag}
       /data-kin-sticky-cta[\s\S]{0,900}Скидка до 3 сентября/.test(mobile),
     stickyCta:
       mobile.includes("data-kin-sticky-cta") &&
-      desktop.includes("data-kin-sticky-cta") &&
+      !desktop.includes("data-kin-sticky-cta") &&
       mobile.includes("data-kin-cta-stop") &&
-      desktop.includes("data-kin-cta-stop") &&
       finalJs.includes("data-kin-sticky-cta"),
     gapScale:
       finalCss.includes("kin-gap") &&

@@ -5,19 +5,14 @@ import { BuyButton } from "@/components/ui/BuyButton";
 import { PRICE, STICKY_CTA } from "@/lib/content";
 
 /**
- * CTA that follows the page. It hides while a section that already shows its
+ * Mobile-only CTA that follows the page. On desktop it would sit beside the
+ * chat widget, and that artboard already carries the CTA in the hero, the
+ * tariffs and the final block. It hides while a section that already shows its
  * own «Купить» is on screen (hero, тарифы, финальный блок), so the two never
  * stack. Lives outside <Canvas> — the canvas `zoom` would otherwise become the
  * containing block and the bar would scroll away with the page.
  */
-export function StickyBuy({
-  className = "",
-  full = false,
-}: {
-  className?: string;
-  /** Full-bleed bar with the note and the countdown above the label. */
-  full?: boolean;
-}) {
+export function StickyBuy({ className = "" }: { className?: string }) {
   const [show, setShow] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -51,7 +46,7 @@ export function StickyBuy({
    */
   useEffect(() => {
     const bar = ref.current;
-    if (!full || !bar) return;
+    if (!bar) return;
     const lift = show ? Math.round(bar.getBoundingClientRect().height) : 0;
     const moved: HTMLElement[] = [];
     Array.from(document.body.children).forEach((node) => {
@@ -68,7 +63,7 @@ export function StickyBuy({
       moved.push(el);
     });
     return () => moved.forEach((el) => (el.style.transform = ""));
-  }, [show, full]);
+  }, [show]);
 
   // Срок стоит внутри кнопки мелкой строкой над ценой: одна цель нажатия,
   // ничего не выступает за её края.
@@ -77,14 +72,10 @@ export function StickyBuy({
       ref={ref}
       data-kin-sticky-cta
       data-kin-show={show}
-      className={
-        full
-          ? "fixed inset-x-0 bottom-0 z-50 flex px-[12px]"
-          : "fixed bottom-0 left-0 z-50 flex pl-[24px]"
-      }
+      className="fixed inset-x-0 bottom-0 z-50 flex px-[12px]"
     >
       <BuyButton
-        className={`flex-col gap-[2px] py-[9px] ${full ? "w-full px-[16px]" : "px-[32px]"} ${className}`}
+        className={`w-full flex-col gap-[2px] px-[16px] py-[9px] ${className}`}
       >
         <span className="text-[10px] font-medium leading-[12px] text-white/85">
           {STICKY_CTA.note}
