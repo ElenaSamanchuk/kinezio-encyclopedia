@@ -45,10 +45,21 @@ export function Canvas({
       const shell = el.parentElement ?? el;
       el.setAttribute("data-kin-sale-over", "");
       shell.setAttribute("data-kin-sale-over", "");
+      // Плавающая кнопка — сосед канваса, а не его потомок. В сборке Тильды
+      // селекторы scoped-ятся в `.kin-root …`, поэтому флаг на корне до неё
+      // не достаёт: ставим его и на саму кнопку.
+      shell
+        .querySelectorAll<HTMLElement>("[data-kin-sticky-cta]")
+        .forEach((node) => node.setAttribute("data-kin-sale-over", ""));
       shell.querySelectorAll<HTMLElement>("[data-kin-after]").forEach((node) => {
         const after = node.getAttribute("data-kin-after");
         if (after) node.textContent = after;
       });
+      // Прячем и стилем: скрытие не должно зависеть от того, как сборщик
+      // перепишет селекторы.
+      shell
+        .querySelectorAll<HTMLElement>("[data-kin-sale-only]")
+        .forEach((node) => (node.style.display = "none"));
     };
 
     // Открыли страницу после дедлайна — переключаем сразу. Открыли до и

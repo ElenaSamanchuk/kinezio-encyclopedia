@@ -761,12 +761,19 @@ function init(wrap){
   var saleOver=function(){
     if(wrap.hasAttribute('data-kin-sale-over'))return;
     wrap.setAttribute('data-kin-sale-over','');
-    [].forEach.call(wrap.querySelectorAll('[data-kin-canvas]'),function(c){
+    /* Селекторы здесь scoped-ятся в .kin-root, поэтому флаг на корне не
+       работает как якорь: он нужен на элементах внутри. Канвасы — для правил
+       сжатия карточки, плавающая кнопка — потому что она сосед канваса. */
+    [].forEach.call(wrap.querySelectorAll('[data-kin-canvas],[data-kin-sticky-cta]'),function(c){
       c.setAttribute('data-kin-sale-over','');
     });
     [].forEach.call(wrap.querySelectorAll('[data-kin-after]'),function(node){
       var after=node.getAttribute('data-kin-after');
       if(after)node.textContent=after;
+    });
+    /* Прячем и стилем: скрытие не должно зависеть от переписывания селекторов. */
+    [].forEach.call(wrap.querySelectorAll('[data-kin-sale-only]'),function(node){
+      node.style.display='none';
     });
   };
   /* Открыли страницу после дедлайна — переключаем сразу. Открыли до и

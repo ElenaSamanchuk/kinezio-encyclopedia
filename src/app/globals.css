@@ -376,6 +376,6 @@ body {
  * Плавающая кнопка теряет верхнюю строку со сроком и становится 35px вместо
  * 49. Держим её на 51 — как остальные кнопки на мобильной вёрстке.
  */
-[data-kin-sale-over] [data-kin-sticky-cta] > a {
+[data-kin-sticky-cta][data-kin-sale-over] > a {
   min-height: 51px;
 }
