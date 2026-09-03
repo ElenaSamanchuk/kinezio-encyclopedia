@@ -1,6 +1,6 @@
 import { CHECKOUT } from "@/lib/content";
 
-type BuyButtonProps = {
+type BuyButtonProps = React.ComponentPropsWithoutRef<"a"> & {
   className?: string;
   dark?: boolean;
   /** Club card is 4 990 ₽; every other CTA is 12 990 ₽. */
@@ -16,9 +16,11 @@ export function BuyButton({
   plan = "full",
   href,
   children = "Купить",
+  ...rest
 }: BuyButtonProps) {
   return (
     <a
+      {...rest}
       href={href ?? CHECKOUT[plan]}
       target="_blank"
       rel="noopener noreferrer"

@@ -2,6 +2,8 @@
 
 import { useLayoutEffect, useRef } from "react";
 
+import { SALE_END_MS } from "@/lib/content";
+
 /**
  * Both artboards are fixed-width canvases (1440 desktop / 430 mobile). When the
  * viewport is narrower we zoom the canvas down so the layout stays
@@ -31,6 +33,31 @@ export function Canvas({
     fit();
     window.addEventListener("resize", fit);
 
+    /*
+     * Акция кончилась. Статика собрана до дедлайна, поэтому в разметке лежит
+     * акционный вариант; здесь он переключается на обычный. Проверка на
+     * клиенте, а не при сборке: страницу открывают когда угодно после.
+     */
+    // Флаг нужен и на канвасе (правила сжатия карточки завязаны на его
+    // data-kin-canvas), и на оболочке артборда — плавающая кнопка лежит рядом
+    // с канвасом, а не внутри, иначе зум сломал бы её фиксацию.
+    const saleOver = () => {
+      const shell = el.parentElement ?? el;
+      el.setAttribute("data-kin-sale-over", "");
+      shell.setAttribute("data-kin-sale-over", "");
+      shell.querySelectorAll<HTMLElement>("[data-kin-after]").forEach((node) => {
+        const after = node.getAttribute("data-kin-after");
+        if (after) node.textContent = after;
+      });
+    };
+
+    // Открыли страницу после дедлайна — переключаем сразу. Открыли до и
+    // оставили висеть — переключим в момент, когда таймер добежит до нуля,
+    // иначе цена так и осталась бы акционной до перезагрузки.
+    let saleTimer: number | undefined;
+    if (Date.now() > SALE_END_MS) saleOver();
+    else saleTimer = window.setTimeout(saleOver, SALE_END_MS - Date.now() + 1000);
+
     const nodes = el.querySelectorAll("[data-kin-reveal]");
     const reduce =
       typeof window.matchMedia === "function" &&
@@ -55,6 +82,7 @@ export function Canvas({
     return () => {
       window.removeEventListener("resize", fit);
       io?.disconnect();
+      if (saleTimer) clearTimeout(saleTimer);
     };
   }, [width]);
 

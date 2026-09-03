@@ -107,10 +107,13 @@ export function StickyBuy({ className = "" }: { className?: string }) {
       <BuyButton
         className={`w-full flex-col gap-[2px] px-[16px] py-[9px] ${className}`}
       >
-        <span className="text-[10px] font-medium leading-[12px] text-white/85">
+        <span data-kin-sale-only className="text-[10px] font-medium leading-[12px] text-white/85">
           {STICKY_CTA.note}
         </span>
-        <span className="text-[14px] font-bold uppercase leading-[17px] tracking-[-0.42px]">
+        <span
+          data-kin-after={`${STICKY_CTA.labelAfter} ${PRICE.old}`}
+          className="text-[14px] font-bold uppercase leading-[17px] tracking-[-0.42px]"
+        >
           {STICKY_CTA.label} {PRICE.now}
         </span>
       </BuyButton>

@@ -15,7 +15,7 @@ export function Pricing() {
             <p className="w-full text-[16px] font-bold leading-[21px]">{PRICING.main.title}</p>
             <p className="w-full text-[14px] font-medium leading-[18px]">{PRICING.main.body}</p>
           </div>
-          <Foot price={PRICE.now} badge={PRICE.discountLabel} buttonText="text-[14px] leading-[17px] tracking-[-0.42px]" plan="full" />
+          <Foot price={PRICE.now} after={PRICE.old} badge={PRICE.discountLabel} buttonText="text-[14px] leading-[17px] tracking-[-0.42px]" plan="full" />
         </article>
 
         <article className="shadow-card flex w-full flex-col items-start gap-[40px] overflow-hidden rounded-[20px] bg-white p-[24px]">
@@ -23,7 +23,7 @@ export function Pricing() {
             <p className="w-full text-[16px] font-bold leading-[21px]">{PRICING.club.title}</p>
             <p className="w-full text-[14px] font-medium leading-[18px]">{PRICING.club.body}</p>
           </div>
-          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} buttonText="text-[16px] leading-[19px] tracking-[-0.48px]" plan="club" href={SUPPORT_TG} cta={PRICING.club.cta} />
+          <Foot price={PRICE.kinezio} after={PRICE.kinezioAfter} badge={PRICE.kinezioLabel} buttonText="text-[16px] leading-[19px] tracking-[-0.48px]" plan="club" href={SUPPORT_TG} cta={PRICING.club.cta} />
         </article>
       </div>
     </section>
@@ -32,6 +32,7 @@ export function Pricing() {
 
 function Foot({
   price,
+  after,
   badge,
   buttonText,
   plan,
@@ -39,6 +40,7 @@ function Foot({
   cta,
 }: {
   price: string;
+  after: string;
   badge: string;
   buttonText: string;
   plan: "full" | "club";
@@ -48,10 +50,13 @@ function Foot({
   return (
     <div className="flex w-full flex-col items-start gap-[16px]">
       <div className="flex flex-col items-start gap-[16px]">
-        <p className="font-display whitespace-nowrap text-[24px] uppercase leading-[29px] text-[#e42525]">
+        <p
+          data-kin-after={after}
+          className="font-display whitespace-nowrap text-[24px] uppercase leading-[29px] text-[#e42525]"
+        >
           {price}
         </p>
-        <div className="flex items-start gap-[12px]">
+        <div data-kin-sale-only={plan === "full" ? "" : undefined} className="flex items-start gap-[12px]">
           <p className="whitespace-nowrap text-[16px] font-semibold uppercase leading-[19px] text-[#242424] line-through decoration-solid">
             {PRICE.old}
           </p>

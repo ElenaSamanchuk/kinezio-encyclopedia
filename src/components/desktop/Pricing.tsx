@@ -15,7 +15,7 @@ export function Pricing() {
             <p className="w-full font-bold leading-[1.3]">{PRICING.main.title}</p>
             <p className="w-full font-medium leading-[1.3]">{PRICING.main.body}</p>
           </div>
-          <Foot price={PRICE.now} badge={PRICE.discountLabel} plan="full" />
+          <Foot price={PRICE.now} after={PRICE.old} badge={PRICE.discountLabel} plan="full" />
         </article>
 
         <article className="shadow-card flex min-w-px flex-1 flex-col items-start gap-[40px] self-stretch overflow-hidden rounded-[20px] bg-white p-[36px]">
@@ -23,7 +23,7 @@ export function Pricing() {
             <p className="w-full text-[16px] font-bold leading-[1.3]">{PRICING.club.title}</p>
             <p className="w-full text-[14px] font-medium leading-[1.3]">{PRICING.club.body}</p>
           </div>
-          <Foot price={PRICE.kinezio} badge={PRICE.kinezioLabel} plan="club" href={SUPPORT_TG} cta={PRICING.club.cta} />
+          <Foot price={PRICE.kinezio} after={PRICE.kinezioAfter} badge={PRICE.kinezioLabel} plan="club" href={SUPPORT_TG} cta={PRICING.club.cta} />
         </article>
       </div>
     </section>
@@ -32,12 +32,14 @@ export function Pricing() {
 
 function Foot({
   price,
+  after,
   badge,
   plan,
   href,
   cta,
 }: {
   price: string;
+  after: string;
   badge: string;
   plan: "full" | "club";
   href?: string;
@@ -46,10 +48,13 @@ function Foot({
   return (
     <div className="flex w-full items-end justify-between gap-[16px]">
       <div className="flex flex-col items-start gap-[16px]">
-        <p className="font-display whitespace-nowrap text-[30px] uppercase leading-[1.2] text-[#e42525]">
+        <p
+          data-kin-after={after}
+          className="font-display whitespace-nowrap text-[30px] uppercase leading-[1.2] text-[#e42525]"
+        >
           {price}
         </p>
-        <div className="flex items-start gap-[12px]">
+        <div data-kin-sale-only={plan === "full" ? "" : undefined} className="flex items-start gap-[12px]">
           <p className="whitespace-nowrap text-[20px] font-semibold uppercase leading-[1.2] text-[#242424] line-through decoration-solid">
             {PRICE.old}
           </p>

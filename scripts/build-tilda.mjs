@@ -663,6 +663,7 @@ function copyFonts(files) {
 /* ------------------------------------------------------------------- JS --- */
 
 const RUNTIME = `(function(){
+  var SALE_END_MS=${SALE_END_MS};
   /*
    * Tilda renders each HTML block on its own, and the order in which they run
    * is not the order they appear in, so the markup may not exist yet when this
@@ -748,6 +749,30 @@ function init(wrap){
     item.setAttribute('data-kin-open',String(open));
     button.setAttribute('aria-expanded',String(open));
   });
+
+  /*
+   * Акция кончилась. Разметка собрана до дедлайна и несёт акционный вариант:
+   * подставляем тексты из data-kin-after и прячем всё, что помечено
+   * data-kin-sale-only — зачёркнутую цену, плашки со сроком и таймер.
+   */
+  /* Флаг нужен и на корне (под ним прячется всё data-kin-sale-only, включая
+     плавающую кнопку), и на самих канвасах — правила сжатия карточки с ценой
+     завязаны на data-kin-canvas. */
+  var saleOver=function(){
+    if(wrap.hasAttribute('data-kin-sale-over'))return;
+    wrap.setAttribute('data-kin-sale-over','');
+    [].forEach.call(wrap.querySelectorAll('[data-kin-canvas]'),function(c){
+      c.setAttribute('data-kin-sale-over','');
+    });
+    [].forEach.call(wrap.querySelectorAll('[data-kin-after]'),function(node){
+      var after=node.getAttribute('data-kin-after');
+      if(after)node.textContent=after;
+    });
+  };
+  /* Открыли страницу после дедлайна — переключаем сразу. Открыли до и
+     оставили висеть — переключим, когда таймер добежит до нуля. */
+  if(Date.now()>SALE_END_MS)saleOver();
+  else setTimeout(saleOver,SALE_END_MS-Date.now()+1000);
 
   /* Countdown to the end of the sale. */
   var timers=[].slice.call(wrap.querySelectorAll('[data-kin-countdown]'));
@@ -990,6 +1015,12 @@ ${scriptTag}
       (desktop.match(/data-kin-open="true"/g) || []).length === 1,
     countdown: desktop.includes("data-kin-countdown") && mobile.includes("data-kin-countdown"),
     countdownMsk: pasteHtml.includes(String(SALE_END_MS)),
+    saleOver:
+      finalJs.includes("data-kin-sale-over") &&
+      finalJs.includes("data-kin-after") &&
+      finalCss.includes("data-kin-sale-only") &&
+      /data-kin-after="14 990/.test(pasteHtml) &&
+      pasteHtml.includes("data-kin-sale-only"),
     deferredBoot:
       finalJs.includes("DOMContentLoaded") &&
       finalJs.includes("setTimeout(watch") &&

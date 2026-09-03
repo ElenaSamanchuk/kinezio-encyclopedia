@@ -14,12 +14,15 @@ export function FinalCta() {
       <p className="kin-h-trim-display font-display absolute left-1/2 top-[80px] w-[604px] -translate-x-1/2 text-center text-[30px] uppercase leading-[1.2] text-white opacity-60">
         {FINAL_CTA.faded}
       </p>
-      <h2 className="font-display absolute left-1/2 top-[128px] w-[604px] -translate-x-1/2 text-center text-[30px] uppercase leading-[1.2] text-white">
+      <h2
+        data-kin-after={FINAL_CTA.titleAfter}
+        className="font-display absolute left-1/2 top-[128px] w-[604px] -translate-x-1/2 text-center text-[30px] uppercase leading-[1.2] text-white"
+      >
         {FINAL_CTA.title}
       </h2>
 
       <div className="absolute left-[calc(50%+0.5px)] top-[208px] flex -translate-x-1/2 items-center gap-[16px]">
-        <Chip tone="orangeText" className="whitespace-nowrap text-center text-[12px] font-semibold leading-[1.3]">
+        <Chip tone="orangeText" data-kin-sale-only className="whitespace-nowrap text-center text-[12px] font-semibold leading-[1.3]">
           {FINAL_CTA.chipLight}
         </Chip>
         <Chip tone="darkCard" className="whitespace-nowrap text-center text-[12px] font-semibold leading-[1.3]">

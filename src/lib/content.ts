@@ -20,10 +20,17 @@ export const HERO_CHIPS = nb([
   { label: "Выгодное продление", dark: false },
 ] as const);
 
+/**
+ * `old` — зачёркнутая цена во время акции; после дедлайна она же становится
+ * действующей. Тексты «после акции» лежат рядом с обычными и подставляются
+ * в рантайме: статика собирается до дедлайна и не знает, когда её откроют.
+ */
 export const PRICE = nb({
   now: "12 990 ₽",
   old: "14 990 ₽",
   kinezio: "4 990 ₽",
+  /** Условия для клиентов KINEZIO после окончания акции. */
+  kinezioAfter: "5 990 ₽",
   discountLabel: "Скидка до 3 сентября",
   kinezioLabel: "Скидка для клиентов KINEZIO",
 } as const);
@@ -180,6 +187,7 @@ export const CERTIFICATE = nb({
 export const STICKY_CTA = {
   note: "До 3 сентября включительно",
   label: "Купить со скидкой за",
+  labelAfter: "Купить за",
 } as const;
 
 export const PRICING = nb({
@@ -241,6 +249,7 @@ export const FAQ_MOBILE = [
 export const FINAL_CTA = nb({
   faded: "Без анатомии никуда",
   title: "Вся база тренера за 12 990 ₽",
+  titleAfter: "Вся база тренера за 14 990 ₽",
   chipLight: "Цена действует до 3 сентября включительно",
   chipDark: "Доступ ко всем материалам на 2 месяца",
 } as const);

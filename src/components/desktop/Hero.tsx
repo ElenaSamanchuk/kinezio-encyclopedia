@@ -47,19 +47,30 @@ export function Hero() {
           ))}
         </div>
 
-        <div className="shadow-hero-card absolute left-[97px] top-[467px] h-[167px] w-[587px] rounded-[16px] bg-white" />
+        <div
+          data-kin-sale-shrink
+          className="shadow-hero-card absolute left-[97px] top-[467px] h-[167px] w-[587px] rounded-[16px] bg-white"
+        />
 
         <div className="absolute left-[121px] top-[491px] flex w-[242px] flex-col items-start gap-[24px]">
           <div className="flex w-full items-center gap-[12px] whitespace-nowrap uppercase leading-[1.2]">
-            <span className="font-display text-[30px] text-[#e42525]">{PRICE.now}</span>
-            <span className="text-[20px] font-semibold text-[#242424] line-through decoration-solid">
+            <span data-kin-after={PRICE.old} className="font-display text-[30px] text-[#e42525]">
+              {PRICE.now}
+            </span>
+            <span
+              data-kin-sale-only
+              className="text-[20px] font-semibold text-[#242424] line-through decoration-solid"
+            >
               {PRICE.old}
             </span>
           </div>
           <BuyButton className="w-[291px] py-[20px] text-[16px] font-bold uppercase tracking-[-0.48px]" />
         </div>
 
-        <div className="absolute left-[463px] top-[475px] flex h-[151px] w-[214px] flex-col items-center gap-[27px] rounded-[12px] border border-solid border-[#ebebeb] bg-white p-[16px]">
+        <div
+          data-kin-sale-only
+          className="absolute left-[463px] top-[475px] flex h-[151px] w-[214px] flex-col items-center gap-[27px] rounded-[12px] border border-solid border-[#ebebeb] bg-white p-[16px]"
+        >
           <Chip tone="redSoft" className="whitespace-nowrap text-center text-[12px] font-semibold leading-[1.3]">
             {PRICE.discountLabel}
           </Chip>
