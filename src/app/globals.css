@@ -379,3 +379,13 @@ body {
 [data-kin-sticky-cta][data-kin-sale-over] > a {
   min-height: 51px;
 }
+
+/* Меню-оверлей: состояние в data-kin-open, чтобы статический экспорт для
+   Тильды переключал его без React. display, а не visibility — панель не должна
+   ловить клики и попадать в таб-порядок, пока закрыта. */
+[data-kin-menu-panel] {
+  display: none;
+}
+[data-kin-menu][data-kin-open="true"] [data-kin-menu-panel] {
+  display: flex;
+}

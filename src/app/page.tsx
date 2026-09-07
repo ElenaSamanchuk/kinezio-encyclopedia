@@ -4,17 +4,17 @@ import { Header } from "@/components/ui/Header";
 
 export default function Home() {
   return (
-    <>
-      {/* Вне <main>: сборка для Тильды забирает только <main>, а там своя шапка. */}
-      <Header />
-      <main className="min-h-screen bg-[#f5f5f5]">
-        <div className="hidden lg:block">
-          <DesktopPage />
-        </div>
-        <div className="lg:hidden">
-          <MobilePage />
-        </div>
-      </main>
-    </>
+    <main className="min-h-screen bg-[#f5f5f5]">
+      {/* Шапка внутри артборда: сборка для Тильды режет <main> на два блока
+          по data-kin-canvas, и меню должно уехать в них вместе с контентом. */}
+      <div className="hidden lg:block">
+        <Header />
+        <DesktopPage />
+      </div>
+      <div className="lg:hidden">
+        <Header />
+        <MobilePage />
+      </div>
+    </main>
   );
 }

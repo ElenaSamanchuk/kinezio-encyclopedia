@@ -41,6 +41,7 @@ const CSS_FILE = path.join(ROOT, "tilda-1-css.html");
 const HTML_DESKTOP_FILE = path.join(ROOT, "tilda-2a-html.html");
 const HTML_MOBILE_FILE = path.join(ROOT, "tilda-2b-html.html");
 const LEGACY_HTML_FILE = path.join(ROOT, "tilda-2-html.html");
+const MENU_FILE = path.join(ROOT, "tilda-1b-menu.html");
 const JS_FILE = path.join(ROOT, "tilda-3-js.html");
 const EXTERNAL_FILE = path.join(ROOT, "tilda-external.html");
 const TILDA_ASSET_DIR = path.join(PUBLIC_DIR, "tilda");
@@ -451,7 +452,21 @@ function splitArtboards(markup) {
   if (!desktop || !mobile) {
     throw new Error(`Could not split artboards (found ${children.length} top-level divs)`);
   }
-  return { desktop: unwrapVisibilityShell(desktop), mobile: unwrapVisibilityShell(mobile) };
+  /*
+   * Шапка отрисована в обеих оболочках, но в Тильде это один блок на всю
+   * страницу: дублировать её в двух артбордах — лишние 5 КБ в каждом, и оба
+   * упираются в лимит вставки. Забираем одну копию и вырезаем из обоих.
+   */
+  const takeMenu = (shell) => {
+    const parts = splitTopLevelDivs(unwrapVisibilityShell(shell));
+    const menu = parts.find((el) => el.includes("data-kin-menu-panel"));
+    const rest = parts.filter((el) => el !== menu).join("");
+    return { menu, rest };
+  };
+  const d = takeMenu(desktop);
+  const m = takeMenu(mobile);
+  if (!d.menu) throw new Error("Header markup not found in the desktop shell");
+  return { desktop: d.rest, mobile: m.rest, menu: d.menu };
 }
 
 function unwrapVisibilityShell(el) {
@@ -733,6 +748,40 @@ function init(wrap){
     }
   }
 
+  /*
+   * Меню шапки. Состояние живёт в data-kin-open, показ панели делает CSS —
+   * здесь только переключение атрибута, замок прокрутки и закрытие по клику
+   * на пункт или по Esc. Делегирование на wrap, потому что в Тильде блоки
+   * инициализируются в произвольном порядке.
+   */
+  var menuSet=function(menu,open){
+    menu.setAttribute('data-kin-open',String(open));
+    var toggle=menu.querySelector('[data-kin-menu-toggle]');
+    if(toggle)toggle.setAttribute('aria-expanded',String(open));
+    document.body.style.overflow=open?'hidden':'';
+  };
+  wrap.addEventListener('click',function(e){
+    if(!e.target.closest)return;
+    var hit=e.target.closest('[data-kin-menu-toggle],[data-kin-menu-close]');
+    if(hit){
+      var menu=hit.closest('[data-kin-menu]');
+      if(menu)menuSet(menu,hit.hasAttribute('data-kin-menu-toggle'));
+      return;
+    }
+    /* Уход по ссылке из открытой панели закрывает её. */
+    var link=e.target.closest('[data-kin-menu-panel] a');
+    if(link){
+      var m=link.closest('[data-kin-menu]');
+      if(m)menuSet(m,false);
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape')return;
+    [].forEach.call(wrap.querySelectorAll('[data-kin-menu][data-kin-open="true"]'),function(m){
+      menuSet(m,false);
+    });
+  });
+
   /* FAQ: one open item per block — the desktop columns share a group, so
      opening on the right closes the left. CSS animates grid-template-rows. */
   wrap.addEventListener('click',function(e){
@@ -938,9 +987,12 @@ function build() {
   );
   const finalCss = toCdn(minifyCss(faces.join("")) + reset + scoped + fontLock + artboardCss);
   const finalMarkup = compactHtml(toCdn(minifyHtml(toCdn(decorateImages(markup)))));
-  const { desktop, mobile } = splitArtboards(finalMarkup);
+  const { desktop, mobile, menu } = splitArtboards(finalMarkup);
   const desktopTag = wrapRoot(desktop, "desktop", fontClass);
   const mobileTag = wrapRoot(mobile, "mobile", fontClass);
+  // Артборд "header" не участвует в скрытии по ширине: правила выше называют
+  // только desktop и mobile, поэтому шапка видна всегда.
+  const menuTag = wrapRoot(menu, "header", fontClass);
   const combinedTag = `<div class="kin-root ${fontClass}">${finalMarkup}</div>`;
   const finalJs = minifyJs(RUNTIME);
 
@@ -958,16 +1010,17 @@ function build() {
   if (fs.existsSync(LEGACY_HTML_FILE)) fs.unlinkSync(LEGACY_HTML_FILE);
 
   const parts = [
-    writeFile(CSS_FILE, `${note(1, 4, "стили, вставить первым")}${heroPreload}${unboundedPreload}${styleTag}`),
+    writeFile(CSS_FILE, `${note(1, 5, "стили, вставить первым")}${heroPreload}${unboundedPreload}${styleTag}`),
+    writeFile(MENU_FILE, `${note(2, 5, "шапка с меню, вставить вторым")}${menuTag}`),
     writeFile(
       HTML_DESKTOP_FILE,
-      `${note(2, 4, "разметка 1440, вставить вторым")}${desktopTag}`
+      `${note(3, 5, "разметка 1440, вставить третьим")}${desktopTag}`
     ),
     writeFile(
       HTML_MOBILE_FILE,
-      `${note(3, 4, "разметка 430, вставить третьим")}${mobileTag}`
+      `${note(4, 5, "разметка 430, вставить четвёртым")}${mobileTag}`
     ),
-    writeFile(JS_FILE, `${note(4, 4, "скрипт, вставить четвёртым")}${scriptTag}`),
+    writeFile(JS_FILE, `${note(5, 5, "скрипт, вставить пятым")}${scriptTag}`),
   ];
 
   const combined = writeFile(
@@ -1046,6 +1099,13 @@ ${scriptTag}
     oneLineParts: parts.every((part) => !fs.readFileSync(part.file, "utf8").includes("\n")),
     underLimit: parts.every((part) => part.size < PASTE_LIMIT),
     noHeader: !/<header\b/i.test(pasteHtml),
+    menu:
+      menuTag.includes("data-kin-menu-panel") &&
+      menuTag.includes("data-kin-menu-toggle") &&
+      !desktop.includes("data-kin-menu") &&
+      !mobile.includes("data-kin-menu") &&
+      finalJs.includes("data-kin-menu-toggle") &&
+      finalCss.includes("data-kin-menu-panel"),
     noFooter: !/<footer\b/i.test(pasteHtml),
     noIframe: !/<iframe\b/i.test(pasteHtml + finalJs + finalCss),
     noFigmaPng: !/\/figma\/[A-Za-z0-9._-]+\.png\b/.test(pasteHtml + finalCss),
