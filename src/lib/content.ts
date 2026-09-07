@@ -253,3 +253,24 @@ export const FINAL_CTA = nb({
   chipLight: "Цена действует до 3 сентября включительно",
   chipDark: "Доступ ко всем материалам на 2 месяца",
 } as const);
+
+/**
+ * Верхнее меню сайта — шапка с kineziofitness.online, снятая замерами.
+ * w — ширина бокса пункта, ml — отступ от предыдущего: у Тильды это Zero Block
+ * с ручной расстановкой, промежутки неравные, и повторяем их как есть.
+ * TODO: подставить реальные адреса разделов вместо корня — слуги страниц
+ * Тильды снаружи не видны.
+ */
+export const SITE_NAV = [
+  { label: "Фундамент движения", href: "https://kineziofitness.online/", w: 131, ml: 41 },
+  { label: "ММТ", href: "https://kineziofitness.online/", w: 51, ml: 46 },
+  { label: "Модуль 0", href: "https://kineziofitness.online/", w: 75, ml: 58 },
+  { label: "KInezio Space", href: "https://kineziofitness.online/", w: 100, ml: 44 },
+  { label: "Результаты и отзывы", href: "https://kineziofitness.online/", w: 133, ml: 56 },
+  { label: "Блог", href: "https://kineziofitness.online/", w: 40, ml: 42 },
+] as const;
+
+export const SITE_ACTIONS = {
+  platform: { label: "Платформа", href: "https://lk.kineziofitness.online/" },
+  account: { label: "ЛК", href: "https://lk.kineziofitness.online/" },
+} as const;
