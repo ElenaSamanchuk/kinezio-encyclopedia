@@ -52,6 +52,7 @@ function Foot({
       <div className="flex flex-col items-start gap-[16px]">
         <p
           data-kin-after={after}
+          data-kin-price-plain={plan === "full" ? "" : undefined}
           className="font-display whitespace-nowrap text-[24px] uppercase leading-[29px] text-[#e42525]"
         >
           {price}

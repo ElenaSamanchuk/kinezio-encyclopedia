@@ -47,24 +47,30 @@ export function Hero() {
           ))}
         </div>
 
+        {/* После акции остаётся одна кнопка с ценой: плашка и строка с ценой
+            рядом с ней уходят, поэтому обе помечены как «только на время акции». */}
         <div
-          data-kin-sale-shrink
+          data-kin-sale-only
           className="shadow-hero-card absolute left-[97px] top-[467px] h-[167px] w-[587px] rounded-[16px] bg-white"
         />
 
-        <div className="absolute left-[121px] top-[491px] flex w-[242px] flex-col items-start gap-[24px]">
-          <div className="flex w-full items-center gap-[12px] whitespace-nowrap uppercase leading-[1.2]">
-            <span data-kin-after={PRICE.old} className="font-display text-[30px] text-[#e42525]">
-              {PRICE.now}
-            </span>
-            <span
-              data-kin-sale-only
-              className="text-[20px] font-semibold text-[#242424] line-through decoration-solid"
-            >
+        <div
+          data-kin-hero-cta
+          className="absolute left-[121px] top-[491px] flex w-[242px] flex-col items-start gap-[24px]"
+        >
+          <div
+            data-kin-sale-only
+            className="flex w-full items-center gap-[12px] whitespace-nowrap uppercase leading-[1.2]"
+          >
+            <span className="font-display text-[30px] text-[#e42525]">{PRICE.now}</span>
+            <span className="text-[20px] font-semibold text-[#242424] line-through decoration-solid">
               {PRICE.old}
             </span>
           </div>
-          <BuyButton className="w-[291px] py-[20px] text-[16px] font-bold uppercase tracking-[-0.48px]" />
+          <BuyButton
+            data-kin-after={`Купить за ${PRICE.old}`}
+            className="w-[291px] py-[20px] text-[16px] font-bold uppercase tracking-[-0.48px]"
+          />
         </div>
 
         <div
