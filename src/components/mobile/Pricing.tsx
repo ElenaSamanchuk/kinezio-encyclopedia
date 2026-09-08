@@ -48,7 +48,10 @@ function Foot({
   cta?: string;
 }) {
   return (
-    <div className="flex w-full flex-col items-start gap-[16px]">
+    <div
+      data-kin-foot-plain={plan === "full" ? "" : undefined}
+      className="flex w-full flex-col items-start gap-[16px]"
+    >
       <div className="flex flex-col items-start gap-[16px]">
         <p
           data-kin-after={after}
